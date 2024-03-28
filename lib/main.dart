@@ -1,5 +1,5 @@
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
-import 'package:buysim_investment_tool_137/splash/splash_screen.dart';
+import 'package:buysim_investment_tool_137/splash/spl_scr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

@@ -1,7 +1,13 @@
-import 'package:buysim_investment_tool_137/core/bi_colors.dart';
-import 'package:buysim_investment_tool_137/core/bi_motin.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:buysim_investment_tool_137/statistics/model/statistics_model.dart';
+import 'package:buysim_investment_tool_137/statistics/statistics_detail/statistics_detail.dart';
+import 'package:buysim_investment_tool_137/statistics/widget/stati_item.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:buysim_investment_tool_137/core/bi_colors.dart';
+import 'package:buysim_investment_tool_137/core/bi_motin.dart';
 
 class StatisticsScreen extends StatelessWidget {
   const StatisticsScreen({super.key});
@@ -36,7 +42,8 @@ class StatisticsScreen extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
                   child: Row(
                     children: [
                       Image.asset(
@@ -76,10 +83,37 @@ class StatisticsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Container(),
-        ],
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: ListView.separated(
+                padding: EdgeInsets.symmetric(vertical: 20.h),
+                itemBuilder: (context, index) {
+                  final listModel = statisticsList[index];
+                  return StatiItem(
+                    model: listModel,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => StatisticsDetail(
+                            modelDetail: listModel,
+                          ),
+                        ),
+                      );
+                    },
+                    acvtiv: '103.56 / -18%',
+                  );
+                },
+                separatorBuilder: (context, index) => SizedBox(height: 16.h),
+                itemCount: statisticsList.length,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
