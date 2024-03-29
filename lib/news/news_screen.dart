@@ -40,7 +40,8 @@ class NewsScreen extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
                   child: Row(
                     children: [
                       Image.asset(

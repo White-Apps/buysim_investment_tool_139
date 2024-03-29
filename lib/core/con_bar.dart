@@ -1,7 +1,7 @@
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
 import 'package:buysim_investment_tool_137/core/bi_motin.dart';
 import 'package:buysim_investment_tool_137/news/news_screen.dart';
-import 'package:buysim_investment_tool_137/settings/settings_screen.dart';
+import 'package:buysim_investment_tool_137/settings/setti_scre.dart';
 import 'package:buysim_investment_tool_137/statistics/statistics_screen.dart';
 import 'package:buysim_investment_tool_137/trade/trade_screen.dart';
 import 'package:flutter/material.dart';
