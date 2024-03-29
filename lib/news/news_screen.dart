@@ -82,56 +82,54 @@ class NewsScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.r),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 16.h),
-              Container(
-                padding: EdgeInsets.all(20.r),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 25, 29, 71),
-                  borderRadius: BorderRadius.circular(50.r),
-                  border: Border.all(
-                    color: const Color.fromARGB(255, 69, 73, 129),
-                    width: 0.7,
+        child: Column(
+          children: [
+            SizedBox(height: 16.h),
+            Container(
+              padding: EdgeInsets.all(20.r),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 25, 29, 71),
+                borderRadius: BorderRadius.circular(50.r),
+                border: Border.all(
+                  color: const Color.fromARGB(255, 69, 73, 129),
+                  width: 0.7,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Time left until the next news:',
+                    style: TextStyle(
+                      fontSize: 14.h,
+                      fontWeight: FontWeight.w400,
+                      color: BiColors.whate,
+                    ),
                   ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Time left until the next news:',
-                      style: TextStyle(
-                        fontSize: 14.h,
-                        fontWeight: FontWeight.w400,
-                        color: BiColors.whate,
-                      ),
+                  Text(
+                    '00:14:24',
+                    style: TextStyle(
+                      fontSize: 14.h,
+                      fontWeight: FontWeight.w700,
+                      color: BiColors.whate,
                     ),
-                    Text(
-                      '00:14:24',
-                      style: TextStyle(
-                        fontSize: 14.h,
-                        fontWeight: FontWeight.w700,
-                        color: BiColors.whate,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              SizedBox(height: 20.h),
-              Expanded(
-                child: ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: listNews.length,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 12),
-                    itemBuilder: (context, index) => NwWidget(
-                          model: listNews[index],
-                        )),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 20.h),
+            Expanded(
+              child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: 1,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 12),
+                  itemBuilder: (context, index) => NwWidget(
+                        model: listNews[index],
+                      )),
+            ),
+          ],
         ),
       ),
     );

@@ -4,19 +4,25 @@ import 'package:buysim_investment_tool_137/news/nw_cont.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class NwWidget extends StatelessWidget {
+class NwWidget extends StatefulWidget {
   const NwWidget({super.key, required this.model});
   final NwModel model;
 
+  @override
+  State<NwWidget> createState() => _NwWidgetState();
+}
+
+class _NwWidgetState extends State<NwWidget> {
+  late List<String> listAns = widget.model.listAnsw;
+  String answerTrue = '';
+  String isActive = '';
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         SizedBox(height: 48.h),
         Text(
-          '''"Microsoft Introduces New Version of Windows with Enhanced Security"
-"Microsoft Acquires Leading Artificial Intelligence Company"
-"Microsoft Develops Cloud Service for Hospital Management"''',
+          widget.model.subTitle,
           style: TextStyle(
             fontSize: 14.h,
             fontWeight: FontWeight.w400,
@@ -28,7 +34,7 @@ class NwWidget extends StatelessWidget {
           color: Color.fromARGB(255, 69, 73, 129),
         ),
         Text(
-          'The company that owns the platforms Facebook, Instagram, and WhatsApp is...',
+          widget.model.questions,
           style: TextStyle(
             fontSize: 18.h,
             fontWeight: FontWeight.w500,
@@ -37,19 +43,27 @@ class NwWidget extends StatelessWidget {
         ),
         SizedBox(height: 16.h),
         BiMotion(
-          onPressed: () {},
+          onPressed: () {
+            setState(() {
+              isActive = listAns[0];
+            });
+          },
           child: Container(
             padding: EdgeInsets.all(20.r),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 25, 29, 71),
+              color: answerTrue == listAns[0]
+                  ? BiColors.green.withOpacity(0.5)
+                  : const Color.fromARGB(255, 25, 29, 71),
               borderRadius: BorderRadius.circular(50.r),
               border: Border.all(
-                color: const Color.fromARGB(255, 69, 73, 129),
+                color: isActive == listAns[0]
+                    ? const Color(0xff0DA6C2)
+                    : const Color.fromARGB(255, 69, 73, 129),
               ),
             ),
             child: Text(
-              'a) Facebook Inc. (FB)',
+              'a) ${listAns[0]}',
               style: TextStyle(
                 fontSize: 14.h,
                 fontWeight: FontWeight.w400,
@@ -60,18 +74,27 @@ class NwWidget extends StatelessWidget {
         ),
         SizedBox(height: 10.h),
         BiMotion(
+          onPressed: () {
+            setState(() {
+              isActive = listAns[1];
+            });
+          },
           child: Container(
             padding: EdgeInsets.all(20.r),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 25, 29, 71),
+              color: answerTrue == listAns[1]
+                  ? BiColors.green.withOpacity(0.5)
+                  : const Color.fromARGB(255, 25, 29, 71),
               borderRadius: BorderRadius.circular(50.r),
               border: Border.all(
-                color: const Color.fromARGB(255, 69, 73, 129),
+                color: isActive == listAns[1]
+                    ? const Color(0xff0DA6C2)
+                    : const Color.fromARGB(255, 69, 73, 129),
               ),
             ),
             child: Text(
-              'a) Facebook Inc. (FB)',
+              'b) ${listAns[1]}',
               style: TextStyle(
                 fontSize: 14.h,
                 fontWeight: FontWeight.w400,
@@ -82,18 +105,27 @@ class NwWidget extends StatelessWidget {
         ),
         SizedBox(height: 10.h),
         BiMotion(
+          onPressed: () {
+            setState(() {
+              isActive = listAns[2];
+            });
+          },
           child: Container(
             padding: EdgeInsets.all(20.r),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 25, 29, 71),
+              color: answerTrue == listAns[2]
+                  ? BiColors.green.withOpacity(0.5)
+                  : const Color.fromARGB(255, 25, 29, 71),
               borderRadius: BorderRadius.circular(50.r),
               border: Border.all(
-                color: const Color.fromARGB(255, 69, 73, 129),
+                color: isActive == listAns[2]
+                    ? const Color(0xff0DA6C2)
+                    : const Color.fromARGB(255, 69, 73, 129),
               ),
             ),
             child: Text(
-              'a) Facebook Inc. (FB)',
+              'c) ${listAns[2]}',
               style: TextStyle(
                 fontSize: 14.h,
                 fontWeight: FontWeight.w400,
@@ -104,19 +136,28 @@ class NwWidget extends StatelessWidget {
         ),
         SizedBox(height: 10.h),
         BiMotion(
+          onPressed: () {
+            setState(() {
+              isActive = listAns[3];
+            });
+          },
           child: Container(
             padding: EdgeInsets.all(20.r),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 25, 29, 71),
+              color: answerTrue == listAns[3]
+                  ? BiColors.green.withOpacity(0.5)
+                  : const Color.fromARGB(255, 25, 29, 71),
               borderRadius: BorderRadius.circular(50.r),
               border: Border.all(
-                color: const Color.fromARGB(255, 69, 73, 129),
+                color: isActive == listAns[3]
+                    ? const Color(0xff0DA6C2)
+                    : const Color.fromARGB(255, 69, 73, 129),
                 //  const Color(0xff0DA6C2),
               ),
             ),
             child: Text(
-              'a) Facebook Inc. (FB)',
+              'd) ${listAns[3]}',
               style: TextStyle(
                 fontSize: 14.h,
                 fontWeight: FontWeight.w400,
@@ -127,6 +168,11 @@ class NwWidget extends StatelessWidget {
         ),
         SizedBox(height: 16.h),
         BiMotion(
+          onPressed: () {
+            setState(() {
+              answerTrue = widget.model.answer;
+            });
+          },
           child: Container(
             padding: EdgeInsets.all(20.r),
             width: MediaQuery.of(context).size.width,
