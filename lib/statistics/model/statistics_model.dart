@@ -2,8 +2,10 @@ class StatisticsModel {
   final String image;
   final String nameCompany;
   final String dec;
+  final bool isBan;
 
   StatisticsModel({
+    this.isBan = false,
     required this.image,
     required this.nameCompany,
     required this.dec,
@@ -12,6 +14,7 @@ class StatisticsModel {
 
 List<StatisticsModel> statisticsList = [
   StatisticsModel(
+    isBan: true,
     image: 'assets/company_logo/1.png',
     nameCompany: 'MSFT',
     dec: 'Microsoft Corporation',
@@ -32,6 +35,7 @@ List<StatisticsModel> statisticsList = [
     dec: 'Facebook Incorporated',
   ),
   StatisticsModel(
+    isBan: true,
     image: 'assets/company_logo/5.png',
     nameCompany: 'TSLA',
     dec: 'Tesla Corporation',
@@ -42,11 +46,13 @@ List<StatisticsModel> statisticsList = [
     dec: 'Johnson & Johnson',
   ),
   StatisticsModel(
+    isBan: true,
     image: 'assets/company_logo/7.png',
     nameCompany: 'KO',
     dec: 'The Coca-Cola Company',
   ),
   StatisticsModel(
+    isBan: true,
     image: 'assets/company_logo/8.png',
     nameCompany: 'PG',
     dec: 'Procter & Gamble Company',
@@ -62,6 +68,7 @@ List<StatisticsModel> statisticsList = [
     dec: 'Visa Incorporated',
   ),
   StatisticsModel(
+    isBan: true,
     image: 'assets/company_logo/11.png',
     nameCompany: 'JPM',
     dec: 'JPMorgan Chase & Co.',

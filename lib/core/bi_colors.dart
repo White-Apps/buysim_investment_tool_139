@@ -5,7 +5,9 @@ abstract class BiColors {
   static const Color black = Color(0xff000000);
   static const Color blue19173D = Color(0xff19173D);
   static const Color bnb1e224f = Color(0xff1e224f);
+  static const Color blue262450 = Color(0xff262450);
   static const Color blue7B78AA = Color(0xff7B78AA);
+  static const Color blue0DA6C2= Color(0xff0DA6C2);
   static const Color green = Color(0xff33FF00);
   static const Color red = Color(0xffFF0000);
   static const Color grey333333 = Color(0xff333333);
