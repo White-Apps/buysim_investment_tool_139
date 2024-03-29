@@ -10,9 +10,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AmountTradeWidget extends StatefulWidget {
   final void Function(double) onAmountEntered;
   const AmountTradeWidget({
-    Key? key,
+    super.key,
     required this.onAmountEntered,
-  }) : super(key: key);
+  });
 
   @override
   State<AmountTradeWidget> createState() => _AmountTradeWidgetState();
@@ -102,49 +102,49 @@ class _AmountTradeWidgetState extends State<AmountTradeWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70.h,
-      padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 12.r),
+      height: 53.h,
+      padding: EdgeInsets.all(15.w),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(24),
+        color: BiColors.blue262450,
+        borderRadius: BorderRadius.circular(15.r),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.15),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Amount',
+          Expanded(
+            child: Center(
+              child: TextField(
+                controller: _controller,
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(4),
+                ],
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.zero,
+                  isDense: true,
+                  border: InputBorder.none,
+                ),
                 style: TextStyle(
-                  fontSize: 12.h,
+                  fontSize: 16.h,
                   fontWeight: FontWeight.w400,
                   color: Colors.white,
                 ),
+                onSubmitted: (_) => handleTrade(),
               ),
-              SizedBox(
-                height: 25.h,
-                width: 50.w,
-                child: TextField(
-                  controller: _controller,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(4),
-                  ],
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                  ),
-                  style: TextStyle(
-                    fontSize: 16.h,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white,
-                  ),
-                  onSubmitted: (_) => handleTrade(),
-                ),
-              ),
-            ],
+            ),
+          ),
+          Text(
+            'usdt',
+            style: TextStyle(
+              fontSize: 15.h,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
           ),
         ],
       ),

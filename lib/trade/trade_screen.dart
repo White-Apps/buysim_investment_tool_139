@@ -3,17 +3,22 @@ import 'dart:async';
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
 import 'package:buysim_investment_tool_137/core/bi_motin.dart';
 import 'package:buysim_investment_tool_137/premium/pre_scr.dart';
+import 'package:buysim_investment_tool_137/statistics/model/statistics_model.dart';
+import 'package:buysim_investment_tool_137/statistics/widget/stati_item.dart';
 import 'package:buysim_investment_tool_137/trade/charts/candle_chart.dart';
 import 'package:buysim_investment_tool_137/trade/charts/linear_chart.dart';
 import 'package:buysim_investment_tool_137/trade/cubit/balance_cubit.dart';
 import 'package:buysim_investment_tool_137/trade/cubit/chart_cubit.dart';
 import 'package:buysim_investment_tool_137/trade/cubit/chart_state.dart';
+import 'package:buysim_investment_tool_137/trade/cubit/currency_cubit.dart';
 import 'package:buysim_investment_tool_137/trade/widget/amount_widget.dart';
 import 'package:buysim_investment_tool_137/trade/widget/bbb.dart';
-import 'package:buysim_investment_tool_137/trade/widget/currency_pair.dart';
 import 'package:buysim_investment_tool_137/trade/widget/methos.dart';
+import 'package:buysim_investment_tool_137/trade/widget/stati_item_trade.dart';
 import 'package:buysim_investment_tool_137/trade/widget/time_dropdown.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -29,7 +34,7 @@ class _TradeScreenState extends State<TradeScreen> {
   double selectedAmount = 100;
   StreamController<bool> _buySignalController = StreamController<bool>();
   double opacity = 1.0;
-
+  late String ttt = statisticsList.first.nameCompany;
   @override
   void initState() {
     super.initState();
@@ -78,6 +83,7 @@ class _TradeScreenState extends State<TradeScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
+        scrolledUnderElevation: 0,
         title: Padding(
           padding: EdgeInsets.only(left: 8.w),
           child: Text(
@@ -151,172 +157,209 @@ class _TradeScreenState extends State<TradeScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                // const BalanceTradeWidget(),
-                SizedBox(width: 16.w),
-                Container(
-                  padding: EdgeInsets.all(8.r),
-                  decoration: BoxDecoration(
-                    color: BiColors.whate.withOpacity(0.08),
-                    border: Border.all(
-                      color: BiColors.whate.withOpacity(0.2),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 20.h),
+              AbsorbPointer(
+                absorbing: opacity < 1.0,
+                child: Opacity(
+                  opacity: opacity,
+                  child: SizedBox(
+                    height: 70.h,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.all(0.r),
+                      itemBuilder: (context, index) {
+                        return BiMotion(
+                          onPressed: () {
+                            BlocProvider.of<CurrencyPairCubit>(context)
+                                .changeCurrencyPair(
+                                    statisticsList[index].nameCompany);
+                            setState(() {
+                              ttt = statisticsList[index].nameCompany;
+                            });
+                          },
+                          child: StatiItemTrade(
+                            model: statisticsList[index],
+                            chek: ttt == statisticsList[index].nameCompany,
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          SizedBox(width: 10.w),
+                      itemCount: statisticsList.length,
                     ),
-                    borderRadius: BorderRadius.circular(8.r),
                   ),
+                ),
+              ),
+              SizedBox(height: 20.h),
+              AbsorbPointer(
+                absorbing: opacity < 1.0,
+                child: Opacity(
+                  opacity: opacity,
                   child: Row(
                     children: <Widget>[
-                      BlocBuilder<ChartCubit, ChartState>(
-                        builder: (context, state) {
-                          return Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () => context
-                                    .read<ChartCubit>()
-                                    .toggleChart(ChartType.linear),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: state.isLinear
-                                        ? const LinearGradient(
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight,
-                                            colors: <Color>[
-                                              Color(0xFF3F8E00),
-                                              Color(0xFFFAFF00),
-                                            ],
-                                          )
-                                        : null,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child:
-                                      Image.asset("assets/images/graph1.png"),
-                                ),
-                              ),
-                              SizedBox(width: 8.w),
-                              GestureDetector(
-                                onTap: () {
-                                  context
-                                      .read<ChartCubit>()
-                                      .toggleChart(ChartType.candlestick);
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: state.isCandlestick
-                                        ? const LinearGradient(
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight,
-                                            colors: <Color>[
-                                              Color(0xFF3F8E00),
-                                              Color(0xFFFAFF00),
-                                            ],
-                                          )
-                                        : null,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child:
-                                      Image.asset("assets/images/graph2.png"),
-                                ),
-                              )
-                            ],
-                          );
-                        },
+                      Expanded(
+                        child: AmountTradeWidget(
+                          onAmountEntered: onAmountEntered,
+                        ),
                       ),
-                      const SizedBox.shrink(),
-                      // FutureBuilder<bool>(
-                      //   future: buyZenusFuncGet(),
-                      //   builder: (context, snapshot) {
-                      //     if (snapshot.data == false) {
-                      //       return Padding(
-                      //         padding: EdgeInsets.only(left: 8.w),
-                      //         child: Image.asset(
-                      //           "assets/images/starPrem.png",
-                      //           height: 16.h,
-                      //           width: 16.w,
-                      //         ),
-                      //       );
-                      //     }
-                      //     return const SizedBox.shrink();
-                      //   },
-                      // ),
+                      SizedBox(width: 10.w),
+                      Expanded(
+                        child: TimeDropdownTradeWidget(
+                          onTimeSelected: onTimeSelected,
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ],
-            ),
-            SizedBox(height: 24.h),
-            BlocBuilder<ChartCubit, ChartState>(
-              builder: (context, state) {
-                if (state.type == ChartType.linear) {
-                  return LinearChartWidget(
-                    selectedTime: selectedTime,
-                    buySignalStream: _buySignalController.stream,
-                    selectedAmount: selectedAmount,
-                  );
-                } else if (state.type == ChartType.candlestick) {
-                  return const CandleChart();
-                }
-                return Container();
-              },
-            ),
-            SizedBox(height: 24.h),
-            AbsorbPointer(
-              absorbing: opacity < 1.0,
-              child: Opacity(
-                opacity: opacity,
-                child: Row(
-                  children: <Widget>[
-                    AmountTradeWidget(
-                      onAmountEntered: onAmountEntered,
-                    ),
-                    SizedBox(width: 8.w),
-                    const Expanded(
-                      child: CurrencyPairTradeWidget(),
-                    ),
-                    SizedBox(width: 8.w),
-                    Expanded(
-                      child: TimeDropdownTradeWidget(
-                        onTimeSelected: onTimeSelected,
-                      ),
-                    ),
-                  ],
-                ),
               ),
-            ),
-            SizedBox(height: 24.h),
-            AbsorbPointer(
-              absorbing: opacity < 1.0,
-              child: Opacity(
-                opacity: opacity,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ZenusButton(
-                        text: 'SELL',
-                        color: BiColors.red,
-                        press: () {
-                          double currentBalance = UserPreferences.getBalance();
-                          UserPreferences.setBalance(
-                            currentBalance - selectedAmount,
+              SizedBox(height: 16.h),
+              Stack(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 333.h,
+                    margin: EdgeInsets.only(top: 20.r),
+                    child: BlocBuilder<ChartCubit, ChartState>(
+                      builder: (context, state) {
+                        if (state.type == ChartType.linear) {
+                          return LinearChartWidget(
+                            selectedTime: selectedTime,
+                            buySignalStream: _buySignalController.stream,
+                            selectedAmount: selectedAmount,
                           );
-                          UserPreferences.setBalance(
-                                  currentBalance - selectedAmount)
-                              .then((_) {
-                            BlocProvider.of<BalanceCubit>(context)
-                                .updateBalance(currentBalance - selectedAmount);
-                          });
-                          onBuyPressed();
-                        },
+                        } else if (state.type == ChartType.candlestick) {
+                          return CandleChart(
+                            selectedTime: selectedTime,
+                            buySignalStream: _buySignalController.stream,
+                            selectedAmount: selectedAmount,
+                          );
+                        }
+                        return Container();
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 16,
+                    child: Container(
+                      padding: EdgeInsets.all(5.r),
+                      height: 45.h,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(13.r),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.15),
+                        ),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          BlocBuilder<ChartCubit, ChartState>(
+                            builder: (context, state) {
+                              return Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () => context
+                                        .read<ChartCubit>()
+                                        .toggleChart(ChartType.linear),
+                                    child: Container(
+                                      height: 35.h,
+                                      width: 35.w,
+                                      padding: EdgeInsets.all(7.5.r),
+                                      decoration: BoxDecoration(
+                                        gradient: state.isLinear
+                                            ? const LinearGradient(
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                                colors: <Color>[
+                                                  Color(0xFF0DA6C2),
+                                                  Color(0xFF0E39C6),
+                                                ],
+                                              )
+                                            : null,
+                                        borderRadius:
+                                            BorderRadius.circular(10.r),
+                                      ),
+                                      child: Image.asset(
+                                          "assets/images/graph1.png",
+                                          width: 35.w),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  GestureDetector(
+                                    onTap: () {
+                                      context
+                                          .read<ChartCubit>()
+                                          .toggleChart(ChartType.candlestick);
+                                    },
+                                    child: Container(
+                                      height: 35.h,
+                                      width: 35.w,
+                                      padding: EdgeInsets.all(7.5.r),
+                                      decoration: BoxDecoration(
+                                        gradient: state.isCandlestick
+                                            ? const LinearGradient(
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                                colors: <Color>[
+                                                  Color(0xFF0DA6C2),
+                                                  Color(0xFF0E39C6),
+                                                ],
+                                              )
+                                            : null,
+                                        borderRadius:
+                                            BorderRadius.circular(10.r),
+                                      ),
+                                      child: Image.asset(
+                                          "assets/images/graph2.png",
+                                          width: 35.w),
+                                    ),
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                          const SizedBox.shrink(),
+                        ],
                       ),
                     ),
-                    SizedBox(width: 8.w),
-                    Expanded(
-                      child: ZenusButton(
+                  ),
+                ],
+              ),
+              SizedBox(height: 21.h),
+              AbsorbPointer(
+                absorbing: opacity < 1.0,
+                child: Opacity(
+                  opacity: opacity,
+                  child: Row(
+                    children: [
+                      ZenusButton(
                         text: 'BUY',
-                        color: BiColors.green,
+                        // color: BiColors.green,
+                        press: () {
+                          double currentBalance = UserPreferences.getBalance();
+                          UserPreferences.setBalance(
+                            currentBalance - selectedAmount,
+                          );
+                          UserPreferences.setBalance(
+                                  currentBalance - selectedAmount)
+                              .then((_) {
+                            BlocProvider.of<BalanceCubit>(context)
+                                .updateBalance(currentBalance - selectedAmount);
+                          });
+                          onBuyPressed();
+                        },
+                        color1: const Color(0xFF0DA6C2),
+                        color2: const Color(0xFF0E39C6),
+                      ),
+                      SizedBox(width: 8.w),
+                      ZenusButton(
+                        text: 'SELL',
+                        color1: const Color(0xFFC25F0D),
+                        color2: const Color(0xFFC60E27),
                         press: () {
                           double currentBalance = UserPreferences.getBalance();
                           UserPreferences.setBalance(
@@ -331,12 +374,13 @@ class _TradeScreenState extends State<TradeScreen> {
                           onBuyPressed();
                         },
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 16.h),
+            ],
+          ),
         ),
       ),
     );

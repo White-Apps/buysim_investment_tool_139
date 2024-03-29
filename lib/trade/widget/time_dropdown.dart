@@ -1,10 +1,10 @@
+import 'package:buysim_investment_tool_137/core/bi_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TimeDropdownTradeWidget extends StatefulWidget {
   final Function(String) onTimeSelected;
-  const TimeDropdownTradeWidget({Key? key, required this.onTimeSelected})
-      : super(key: key);
+  const TimeDropdownTradeWidget({super.key, required this.onTimeSelected});
 
   @override
   State<TimeDropdownTradeWidget> createState() =>
@@ -21,8 +21,6 @@ class _TimeDropdownTradeWidgetState extends State<TimeDropdownTradeWidget> {
     '1 min',
     '3 min',
     '5 min',
-    '15 min',
-    '45 min',
   ];
 
   @override
@@ -32,42 +30,32 @@ class _TimeDropdownTradeWidgetState extends State<TimeDropdownTradeWidget> {
       child: GestureDetector(
         onTap: _toggleDropdown,
         child: Container(
-          height: 70.h,
-          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+          height: 53.h,
+          padding: EdgeInsets.all(15.w),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.08),
-            borderRadius: BorderRadius.circular(24.r),
+            color: BiColors.blue262450,
+            borderRadius: BorderRadius.circular(15.r),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.15),
+            ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Time',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Text(
-                    selectedTime,
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+              Text(
+                selectedTime,
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
               ),
               Icon(
                 isMenuOpen
                     ? Icons.keyboard_arrow_up
                     : Icons.keyboard_arrow_down,
                 color: Colors.white,
+                size: 23.r,
               ),
             ],
           ),
@@ -97,13 +85,10 @@ class _TimeDropdownTradeWidgetState extends State<TimeDropdownTradeWidget> {
     var size = renderBox.size;
     var offset = renderBox.localToGlobal(Offset.zero);
 
-    double listHeight = times.length * 40.h;
+    // double listHeight = times.length * 40.h;
     double listWidth = size.width;
-    double top = offset.dy - listHeight;
-    double topMargin = MediaQuery.of(context).padding.top;
-    if (top < topMargin) {
-      top = topMargin;
-    }
+
+    double top = offset.dy + size.height;
 
     return OverlayEntry(
       builder: (context) => Positioned(
@@ -116,10 +101,7 @@ class _TimeDropdownTradeWidgetState extends State<TimeDropdownTradeWidget> {
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.08),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(24.r),
-                topRight: Radius.circular(24.r),
-              ),
+              borderRadius: BorderRadius.circular(15.r),
               boxShadow: const [
                 BoxShadow(
                   color: Colors.black45,
@@ -142,13 +124,14 @@ class _TimeDropdownTradeWidgetState extends State<TimeDropdownTradeWidget> {
                 },
                 child: Container(
                   width: listWidth,
-                  height: 40.h, // height for each list item
+                  height: 40.h,
                   alignment: Alignment.center,
                   child: Text(
                     times[index],
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16.sp,
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),

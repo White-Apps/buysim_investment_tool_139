@@ -6,7 +6,16 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class CandleChart extends StatefulWidget {
-  const CandleChart({super.key});
+  final String selectedTime;
+  final Stream<bool> buySignalStream;
+  final double selectedAmount;
+
+  const CandleChart({
+    super.key,
+    required this.selectedTime,
+    required this.buySignalStream,
+    required this.selectedAmount,
+  });
 
   @override
   State<CandleChart> createState() => _CandleChartState();
@@ -15,24 +24,42 @@ class CandleChart extends StatefulWidget {
 class _CandleChartState extends State<CandleChart> {
   Timer? _timer;
   List<CandleData> _candleData = [];
+  late StreamSubscription<bool> _buySignalSubscription;
 
   @override
   void initState() {
     super.initState();
     _candleData = getCandleData();
+
+    // Обновление графика каждую секунду
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      setState(() {
-        _candleData.add(getRandomCandleData());
-        if (_candleData.length > 20) {
-          _candleData.removeAt(0);
-        }
-      });
+      addRandomCandleData();
+    });
+
+    // Подписка на сигналы покупки
+    _buySignalSubscription = widget.buySignalStream.listen((buySignal) {
+      if (buySignal) {
+        // Добавление специальной свечи для сигнала покупки
+        addRandomCandleData(isBuySignal: true);
+      }
+    });
+  }
+
+  void addRandomCandleData({bool isBuySignal = false}) {
+    setState(() {
+      final newData = getRandomCandleData(isBuySignal: isBuySignal);
+      _candleData.add(newData);
+      // Ограничение количества данных на графике
+      if (_candleData.length > 20) {
+        _candleData.removeAt(0);
+      }
     });
   }
 
   @override
   void dispose() {
     _timer?.cancel();
+    _buySignalSubscription.cancel();
     super.dispose();
   }
 
@@ -69,13 +96,17 @@ class _CandleChartState extends State<CandleChart> {
     return data;
   }
 
-  CandleData getRandomCandleData() {
-    final DateTime now = DateTime.now();
+  CandleData getRandomCandleData({bool isBuySignal = false}) {
+    final DateTime now =
+        DateTime.now().subtract(Duration(seconds: _candleData.length));
     final Random random = Random();
     final double open = random.nextDouble() * (0.91785 - 0.91755) + 0.91755;
     final double close = random.nextDouble() * (0.91785 - 0.91755) + 0.91755;
     final double high = max(open, close) + random.nextDouble() * 0.0001;
     final double low = min(open, close) - random.nextDouble() * 0.0001;
+    // Можно добавить логику изменения данных на основе
+    // ...продолжение getRandomCandleData
+    // Можно добавить логику изменения данных на основе isBuySignal
     return CandleData(
         time: now, open: open, high: high, low: low, close: close);
   }
