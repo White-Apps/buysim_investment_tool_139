@@ -1,11 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:buysim_investment_tool_137/core/urls.dart';
 import 'package:buysim_investment_tool_137/core/web_vieww.dart';
 import 'package:buysim_investment_tool_137/premium/pre_scr.dart';
 import 'package:buysim_investment_tool_137/settings/widget/sett_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
 import 'package:buysim_investment_tool_137/core/bi_motin.dart';
 

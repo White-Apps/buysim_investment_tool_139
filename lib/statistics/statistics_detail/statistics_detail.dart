@@ -1,6 +1,9 @@
 import 'package:buysim_investment_tool_137/statistics/statistics_detail/bottom_sheet.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:buysim_investment_tool_137/statistics/statistics_detail/cha_cub.dart';
+import 'package:buysim_investment_tool_137/statistics/statistics_detail/pageVi.dart';
+import 'package:buysim_investment_tool_137/statistics/statistics_detail/char.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
 import 'package:buysim_investment_tool_137/core/bi_motin.dart';
@@ -10,8 +13,12 @@ class StatisticsDetail extends StatefulWidget {
   const StatisticsDetail({
     super.key,
     required this.modelDetail,
+    required this.acsi,
+    required this.port,
   });
   final StatisticsModel modelDetail;
+  final double acsi;
+  final int port;
   @override
   State<StatisticsDetail> createState() => _StatisticsDetailState();
 }
@@ -21,6 +28,7 @@ class _StatisticsDetailState extends State<StatisticsDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 55.h,
         leading: Padding(
           padding: EdgeInsets.only(left: 19.w),
           child: BiMotion(
@@ -49,7 +57,6 @@ class _StatisticsDetailState extends State<StatisticsDetail> {
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
           children: [
-            SizedBox(height: 10.h),
             Row(
               children: [
                 Image.asset(
@@ -85,27 +92,39 @@ class _StatisticsDetailState extends State<StatisticsDetail> {
                 )
               ],
             ),
-            SizedBox(height: 15.h),
+            SizedBox(height: 10.h),
             Row(
               children: [
                 Text(
-                  '\$103.56 / -18%',
+                  '\$${widget.acsi} / ${widget.port}%',
                   style: TextStyle(
                     fontSize: 30.h,
                     fontWeight: FontWeight.w500,
-                    color: BiColors.redE31212,
+                    color: widget.port < 0
+                        ? BiColors.redE31212
+                        : BiColors.green1BE312,
                     height: 0,
                   ),
                 ),
                 SizedBox(width: 5.w),
                 Image.asset(
-                  'assets/icons/bancr_icon.png',
-                  // 'assets/icons/bluss_icon.png',
+                  widget.port < 0
+                      ? 'assets/icons/bancr_icon.png'
+                      : 'assets/icons/bluss_icon.png',
                   width: 16.w,
                 ),
               ],
             ),
-            const Spacer(),
+            SizedBox(height: 10.h),
+            PlusCurTogglePOJcamcasasd(
+              onTimeframeSelected: (index) {
+                context.read<PlusCurCubitIUGBSD>().oihjfnvewvwvvrev(index);
+                context.read<PlusCurCubitIUGBSD>().kmvskmdvsdvsdv(index);
+              },
+            ),
+            SizedBox(height: 35.h),
+            const PlusCurChartkjbscjdvs(),
+            SizedBox(height: 12.h),
             BiMotion(
               onPressed: () {
                 bottomShet(context);
@@ -143,7 +162,6 @@ class _StatisticsDetailState extends State<StatisticsDetail> {
                 ),
               ),
             ),
-            SizedBox(height: 30.h),
           ],
         ),
       ),
