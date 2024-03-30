@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
 import 'package:buysim_investment_tool_137/core/bi_motin.dart';
 import 'package:buysim_investment_tool_137/news/nw_cont.dart';
@@ -16,16 +18,26 @@ class _NwWidgetState extends State<NwWidget> {
   late List<String> listAns = widget.model.listAnsw;
   String answerTrue = '';
   String selectedAnswer = '';
+  int usdt = 0;
+  int getRandomSteps() {
+    return Random().nextInt(1000 - 200) + 200;
+  }
+
+  @override
+  void initState() {
+    usdt = getRandomSteps();
+    super.initState();
+  }
 
   void checkSelectedAnswer() {
     if (selectedAnswer == answerTrue) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Color(0xff0E39C6),
+        SnackBar(
+          backgroundColor: const Color(0xff0E39C6),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Correct answer gain:',
                 style: TextStyle(
                   fontSize: 16,
@@ -34,8 +46,8 @@ class _NwWidgetState extends State<NwWidget> {
                 ),
               ),
               Text(
-                '1187,35 USDT',
-                style: TextStyle(
+                '$usdt USDT',
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
@@ -43,7 +55,7 @@ class _NwWidgetState extends State<NwWidget> {
               ),
             ],
           ),
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 2),
         ),
       );
     } else {
@@ -60,7 +72,7 @@ class _NwWidgetState extends State<NwWidget> {
               ),
             ),
           ),
-          duration: Duration(seconds: 3),
+          duration: Duration(seconds: 2),
         ),
       );
     }
@@ -181,12 +193,11 @@ class _NwWidgetState extends State<NwWidget> {
     );
   }
 
-  // Function to build each answer option container
   Widget buildOptionContainer(int index, String text) {
     return BiMotion(
       onPressed: () {
         setState(() {
-          selectedAnswer = listAns[index]; // Update selected answer
+          selectedAnswer = listAns[index];
         });
       },
       child: Container(

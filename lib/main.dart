@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
           title: 'BuySim: Investment Tool',
           home: child,
           theme: ThemeData(
+            fontFamily: 'SFProDisplay',
             splashColor: Colors.transparent,
             splashFactory: NoSplash.splashFactory,
             highlightColor: Colors.transparent,
