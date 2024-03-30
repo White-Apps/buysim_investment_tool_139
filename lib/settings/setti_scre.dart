@@ -5,7 +5,6 @@ import 'package:buysim_investment_tool_137/settings/widget/sett_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
-import 'package:buysim_investment_tool_137/core/bi_motin.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});

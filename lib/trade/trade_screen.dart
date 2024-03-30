@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
 import 'package:buysim_investment_tool_137/core/bi_motin.dart';
-import 'package:buysim_investment_tool_137/premium/pre_scr.dart';
 import 'package:buysim_investment_tool_137/statistics/model/statistics_model.dart';
-import 'package:buysim_investment_tool_137/statistics/widget/stati_item.dart';
 import 'package:buysim_investment_tool_137/trade/charts/candle_chart.dart';
 import 'package:buysim_investment_tool_137/trade/charts/linear_chart.dart';
 import 'package:buysim_investment_tool_137/trade/cubit/balance_cubit.dart';
@@ -16,9 +14,7 @@ import 'package:buysim_investment_tool_137/trade/widget/bbb.dart';
 import 'package:buysim_investment_tool_137/trade/widget/methos.dart';
 import 'package:buysim_investment_tool_137/trade/widget/stati_item_trade.dart';
 import 'package:buysim_investment_tool_137/trade/widget/time_dropdown.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

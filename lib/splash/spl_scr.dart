@@ -1,5 +1,4 @@
 import 'package:buysim_investment_tool_137/core/con_bar.dart';
-import 'package:buysim_investment_tool_137/onbording/onbo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
