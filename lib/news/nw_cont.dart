@@ -20,7 +20,7 @@ class NwModel {
 
 List<NwModel> listNews = [
   NwModel(
-    image: '',
+    image: 'assets/company_logo/1.png',
     name: 'MSFT',
     company: 'Microsoft Corporation',
     subTitle:
@@ -31,14 +31,14 @@ Microsoft Develops Cloud Service for Hospital Management''',
         'The company that owns the platforms Facebook, Instagram, and WhatsApp is...',
     answer: 'Facebook Inc. (FB)',
     listAnsw: [
-      'Facebook Inc. (FB)',
       'Tesla Inc. (TSLA)',
+      'Facebook Inc. (FB)',
       'Johnson & Johnson (JNJ)',
       'The Coca-Cola Company (KO)',
     ],
   ),
   NwModel(
-    image: '',
+    image: 'assets/company_logo/2.png',
     name: 'AMZN',
     company: 'Amazon.com Inc.',
     subTitle: '''Amazon Expands Drone Delivery Network to New Regions
@@ -48,14 +48,14 @@ Amazon Launches Training Program for Its Employees''',
         'Which of the companies is a well-known producer of electric cars?',
     answer: 'Tesla Inc. (TSLA)',
     listAnsw: [
-      'Tesla Inc. (TSLA)',
       'Walmart Inc. (WMT)',
       'Procter & Gamble Company (PG)',
       'Visa Inc. (V)',
+      'Tesla Inc. (TSLA)',
     ],
   ),
   NwModel(
-    image: '',
+    image: 'assets/company_logo/3.png',
     name: 'GOOGL',
     company: 'Alphabet Inc.',
     subTitle:
@@ -73,7 +73,7 @@ Alphabet Invests in Quantum Computing Research''',
     ],
   ),
   NwModel(
-    image: '',
+    image: 'assets/company_logo/4.png',
     name: 'FB',
     company: 'Facebook Inc.',
     subTitle:
@@ -83,14 +83,14 @@ Instagram, Owned by Facebook, Introduces New Tools for Businesses''',
     questions: 'The company producing beverages like Coca-Cola belongs to...',
     answer: 'The Coca-Cola Company (KO)',
     listAnsw: [
-      'The Coca-Cola Company (KO)',
       'Walmart Inc. (WMT)',
       'Visa Inc. (V)',
+      'The Coca-Cola Company (KO)',
       'JPMorgan Chase & Co. (JPM)',
     ],
   ),
   NwModel(
-    image: '',
+    image: 'assets/company_logo/5.png',
     name: 'TSLA',
     company: 'Tesla Inc.',
     subTitle: '''Tesla Announces New Electric Car Model with Extended Range
@@ -100,14 +100,14 @@ Elon Musk, Tesla's CEO, Reveals Company's Plans for Autonomous Taxis''',
         'The company known for its household care and personal hygiene products is...',
     answer: 'Procter & Gamble Company (PG)',
     listAnsw: [
-      'Procter & Gamble Company (PG)',
       'Walmart Inc. (WMT)',
+      'Procter & Gamble Company (PG)',
       'Visa Inc. (V)',
       'JPMorgan Chase & Co. (JPM)',
     ],
   ),
   NwModel(
-    image: '',
+    image: 'assets/company_logo/6.png',
     name: 'JNJ',
     company: 'Johnson & Johnson',
     subTitle:
@@ -124,7 +124,7 @@ Johnson & Johnson's New Research Center Focuses on Oncology Studies''',
     ],
   ),
   NwModel(
-    image: '',
+    image: 'assets/company_logo/7.png',
     name: 'KO',
     company: 'The Coca-Cola Company',
     subTitle: '''Coca-Cola Introduces New Soda Flavor as Part of Summer Campaign
@@ -141,7 +141,7 @@ Coca-Cola Company Signs Collaboration Agreement with Local Farmers to Improve In
     ],
   ),
   NwModel(
-    image: '',
+    image: 'assets/company_logo/8.png',
     name: 'PG',
     company: 'Procter & Gamble Company',
     subTitle:

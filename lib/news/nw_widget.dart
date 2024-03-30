@@ -20,7 +20,43 @@ class _NwWidgetState extends State<NwWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 48.h),
+        Row(
+          children: [
+            Image.asset(
+              widget.model.image,
+              width: 47.w,
+            ),
+            SizedBox(width: 10.w),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '(${widget.model.name})',
+                  style: TextStyle(
+                    fontSize: 14.h,
+                    fontWeight: FontWeight.w500,
+                    color: BiColors.whate,
+                    height: 0,
+                  ),
+                ),
+                SizedBox(height: 3.h),
+                FittedBox(
+                  child: Text(
+                    widget.model.company,
+                    style: TextStyle(
+                      fontSize: 14.h,
+                      fontWeight: FontWeight.w500,
+                      color: BiColors.blue7B78AA,
+                      height: 0,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+        SizedBox(height: 16.h),
         Text(
           widget.model.subTitle,
           style: TextStyle(
@@ -153,7 +189,6 @@ class _NwWidgetState extends State<NwWidget> {
                 color: isActive == listAns[3]
                     ? const Color(0xff0DA6C2)
                     : const Color.fromARGB(255, 69, 73, 129),
-                //  const Color(0xff0DA6C2),
               ),
             ),
             child: Text(
