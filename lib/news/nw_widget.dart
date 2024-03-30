@@ -204,9 +204,40 @@ class _NwWidgetState extends State<NwWidget> {
         SizedBox(height: 16.h),
         BiMotion(
           onPressed: () {
-            setState(() {
-              answerTrue = widget.model.answer;
-            });
+            if (answerTrue.isEmpty) {
+              setState(() {
+                answerTrue = widget.model.answer;
+              });
+              if (isActive == widget.model.answer) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    backgroundColor: Color(0xff0E39C6),
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Correct answer gain:',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          '1187,35 USDT',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    duration: Duration(seconds: 3),
+                  ),
+                );
+              }
+            }
           },
           child: Container(
             padding: EdgeInsets.all(20.r),
