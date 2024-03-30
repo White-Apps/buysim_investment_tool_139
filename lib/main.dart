@@ -44,6 +44,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => CurrencyPairCubit(),
           ),
+           BlocProvider(
+            create: (context) => GetTradeCubit(TradeRepoImpl()),
+          ),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -60,7 +63,6 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        child: const SplashScreen(),
       ),
     );
   }
