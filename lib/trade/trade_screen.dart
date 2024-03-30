@@ -9,6 +9,9 @@ import 'package:buysim_investment_tool_137/trade/cubit/balance_cubit.dart';
 import 'package:buysim_investment_tool_137/trade/cubit/chart_cubit.dart';
 import 'package:buysim_investment_tool_137/trade/cubit/chart_state.dart';
 import 'package:buysim_investment_tool_137/trade/cubit/currency_cubit.dart';
+import 'package:buysim_investment_tool_137/trade/logic/cubits/set_trade_cubit/set_trade_cubit.dart';
+import 'package:buysim_investment_tool_137/trade/logic/models/trade_model.dart';
+import 'package:buysim_investment_tool_137/trade/logic/repositories/trade_repo.dart';
 import 'package:buysim_investment_tool_137/trade/widget/amount_widget.dart';
 import 'package:buysim_investment_tool_137/trade/widget/bbb.dart';
 import 'package:buysim_investment_tool_137/trade/widget/methos.dart';
@@ -49,31 +52,59 @@ class _TradeScreenState extends State<TradeScreen> {
     });
   }
 
-  void onBuyPressed() {
-    int timeInMinutes = int.tryParse(selectedTime.split(' ')[0]) ?? 1;
-    Duration duration = Duration(minutes: timeInMinutes);
-
-    setState(() {
-      opacity = 0.5;
-    });
-
-    Future.delayed(duration).then((_) {
-      _buySignalController.add(true);
-
-      setState(() {
-        opacity = 1.0;
-      });
-    });
-    // ignore: avoid_print
-    print("Началось");
-  }
-
   @override
   void dispose() {
     _buySignalController.close();
     super.dispose();
   }
 
+  void showCustomToast(BuildContext context, String message, String title,
+      Color color1, Color color2) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        content: Container(
+          padding: EdgeInsets.all(20.sp),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: <Color>[
+                color1,
+                color2,
+              ],
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16.h,
+                  fontWeight: FontWeight.w400,
+                  color: BiColors.whate,
+                ),
+              ),
+              Text(
+                '$message USDT',
+                style: TextStyle(
+                  fontSize: 16.h,
+                  fontWeight: FontWeight.w700,
+                  color: BiColors.whate,
+                ),
+              ),
+            ],
+          ),
+        ),
+        duration: const Duration(seconds: 2),
+        elevation: 0,
+      ),
+    );
+  }
+
+  bool ccc = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,19 +198,22 @@ class _TradeScreenState extends State<TradeScreen> {
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       padding: EdgeInsets.all(0.r),
-                      itemBuilder: (context, index) {
+                      itemBuilder: (context, state) {
                         return BiMotion(
                           onPressed: () {
-                            BlocProvider.of<CurrencyPairCubit>(context)
-                                .changeCurrencyPair(
-                                    statisticsList[index].nameCompany);
-                            setState(() {
-                              ttt = statisticsList[index].nameCompany;
-                            });
+                            if (mounted) {
+                              BlocProvider.of<CurrencyPairCubit>(context)
+                                  .changeCurrencyPair(
+                                      statisticsList[state].nameCompany);
+
+                              setState(() {
+                                ttt = statisticsList[state].nameCompany;
+                              });
+                            }
                           },
                           child: StatiItemTrade(
-                            model: statisticsList[index],
-                            chek: ttt == statisticsList[index].nameCompany,
+                            model: statisticsList[state],
+                            chek: ttt == statisticsList[state].nameCompany,
                           ),
                         );
                       },
@@ -200,6 +234,11 @@ class _TradeScreenState extends State<TradeScreen> {
                       Expanded(
                         child: AmountTradeWidget(
                           onAmountEntered: onAmountEntered,
+                          ooo: (value) {
+                            setState(() {
+                              ccc = value;
+                            });
+                          },
                         ),
                       ),
                       SizedBox(width: 10.w),
@@ -326,52 +365,180 @@ class _TradeScreenState extends State<TradeScreen> {
                 ],
               ),
               SizedBox(height: 21.h),
-              AbsorbPointer(
-                absorbing: opacity < 1.0,
-                child: Opacity(
-                  opacity: opacity,
-                  child: Row(
-                    children: [
-                      ZenusButton(
-                        text: 'BUY',
-                        // color: BiColors.green,
-                        press: () {
-                          double currentBalance = UserPreferences.getBalance();
-                          UserPreferences.setBalance(
-                            currentBalance - selectedAmount,
-                          );
-                          UserPreferences.setBalance(
-                                  currentBalance - selectedAmount)
-                              .then((_) {
-                            BlocProvider.of<BalanceCubit>(context)
-                                .updateBalance(currentBalance - selectedAmount);
-                          });
-                          onBuyPressed();
-                        },
-                        color1: const Color(0xFF0DA6C2),
-                        color2: const Color(0xFF0E39C6),
+              BlocProvider(
+                create: (context) => SetTradeCubit(TradeRepoImpl()),
+                child: BlocConsumer<SetTradeCubit, SetTradeState>(
+                  listener: (context, state) {
+                    if (state is Success) {
+                    } else if (state is Error) {
+                      final errorMessage = state.e;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error: $errorMessage')),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is Loading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return AbsorbPointer(
+                      absorbing: opacity < 1.0,
+                      child: Opacity(
+                        opacity: opacity,
+                        child: Row(
+                          children: [
+                            ZenusButton(
+                              text: 'BUY',
+                              color1: const Color(0xFF0DA6C2),
+                              color2: const Color(0xFF0E39C6),
+                              press: () async {
+                                if (ccc == false) {
+                                  bool chek = false;
+                                  double previousBalance =
+                                      UserPreferences.getBalance();
+                                  double currentBalance =
+                                      previousBalance - selectedAmount;
+                                  await UserPreferences.setBalance(
+                                      currentBalance);
+                                  BlocProvider.of<BalanceCubit>(context)
+                                      .updateBalance(currentBalance);
+
+                                  setState(() {
+                                    opacity = 0.5;
+                                  });
+
+                                  int timeInMinutes = int.tryParse(
+                                          selectedTime.split(' ')[0]) ??
+                                      1;
+                                  Duration duration =
+                                      Duration(minutes: timeInMinutes);
+
+                                  await Future.delayed(duration);
+
+                                  _buySignalController.add(true);
+
+                                  double newBalance = UserPreferences
+                                      .getBalance(); // Предположим, что баланс может измениться в результате других операций
+
+                                  if (newBalance > previousBalance) {
+                                    showCustomToast(
+                                        context,
+                                        selectedAmount.toString(),
+                                        'You won:',
+                                        const Color(0xFF0DC271),
+                                        const Color(0xFF0EA7C6));
+                                    setState(() {
+                                      chek = true;
+                                    });
+                                  } else {
+                                    showCustomToast(
+                                        context,
+                                        selectedAmount.toString(),
+                                        'You loss:',
+                                        const Color(0xFFC25F0D),
+                                        const Color(0xFFC60E27));
+                                    setState(() {
+                                      chek = false;
+                                    });
+                                  }
+
+                                  TradeHiveModel tradeHiveModel =
+                                      TradeHiveModel(
+                                          id: DateTime.now()
+                                              .millisecondsSinceEpoch,
+                                          sum: selectedAmount,
+                                          chek: chek,
+                                          date: DateTime.now());
+
+                                  context
+                                      .read<SetTradeCubit>()
+                                      .setTrade(tradeHiveModel);
+
+                                  setState(() {
+                                    opacity = 1.0;
+                                  });
+                                }
+                              },
+                            ),
+                            SizedBox(width: 8.w),
+                            ZenusButton(
+                              text: 'SELL',
+                              color1: const Color(0xFFC25F0D),
+                              color2: const Color(0xFFC60E27),
+                              press: () async {
+                                if (ccc == false) {
+                                  bool chek = false;
+                                  double previousBalance =
+                                      UserPreferences.getBalance();
+                                  double currentBalance =
+                                      previousBalance - selectedAmount;
+                                  await UserPreferences.setBalance(
+                                      currentBalance);
+                                  BlocProvider.of<BalanceCubit>(context)
+                                      .updateBalance(currentBalance);
+
+                                  setState(() {
+                                    opacity = 0.5;
+                                  });
+
+                                  int timeInMinutes = int.tryParse(
+                                          selectedTime.split(' ')[0]) ??
+                                      1;
+                                  Duration duration =
+                                      Duration(minutes: timeInMinutes);
+
+                                  await Future.delayed(duration);
+
+                                  _buySignalController.add(true);
+
+                                  double newBalance = UserPreferences
+                                      .getBalance(); // Предположим, что баланс может измениться в результате других операций
+
+                                  if (newBalance > previousBalance) {
+                                    showCustomToast(
+                                        context,
+                                        selectedAmount.toString(),
+                                        'You won:',
+                                        const Color(0xFF0DC271),
+                                        const Color(0xFF0EA7C6));
+                                    setState(() {
+                                      chek = true;
+                                    });
+                                  } else {
+                                    showCustomToast(
+                                        context,
+                                        selectedAmount.toString(),
+                                        'You loss:',
+                                        const Color(0xFFC25F0D),
+                                        const Color(0xFFC60E27));
+                                    setState(() {
+                                      chek = false;
+                                    });
+                                  }
+
+                                  TradeHiveModel tradeHiveModel =
+                                      TradeHiveModel(
+                                          id: DateTime.now()
+                                              .millisecondsSinceEpoch,
+                                          sum: selectedAmount,
+                                          chek: chek,
+                                          date: DateTime.now());
+
+                                  context
+                                      .read<SetTradeCubit>()
+                                      .setTrade(tradeHiveModel);
+
+                                  setState(() {
+                                    opacity = 1.0;
+                                  });
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(width: 8.w),
-                      ZenusButton(
-                        text: 'SELL',
-                        color1: const Color(0xFFC25F0D),
-                        color2: const Color(0xFFC60E27),
-                        press: () {
-                          double currentBalance = UserPreferences.getBalance();
-                          UserPreferences.setBalance(
-                            currentBalance - selectedAmount,
-                          );
-                          UserPreferences.setBalance(
-                                  currentBalance - selectedAmount)
-                              .then((_) {
-                            BlocProvider.of<BalanceCubit>(context)
-                                .updateBalance(currentBalance - selectedAmount);
-                          });
-                          onBuyPressed();
-                        },
-                      ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ),
               SizedBox(height: 16.h),

@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:buysim_investment_tool_137/trade/cubit/currency_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -22,39 +24,72 @@ class CandleChart extends StatefulWidget {
 }
 
 class _CandleChartState extends State<CandleChart> {
-  Timer? _timer;
-  List<CandleData> _candleData = [];
+  late List<ChartData> _chartData;
+  late ChartSeriesController _chartSeriesController;
   late StreamSubscription<bool> _buySignalSubscription;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    _candleData = getCandleData();
-
-    // Обновление графика каждую секунду
-    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      addRandomCandleData();
+    _chartData = getInitialChartData();
+    _timer = Timer.periodic(Duration(seconds: 1), _updateDataSource);
+    context.read<CurrencyPairCubit>().stream.listen((_) {
+      _refreshChartData();
     });
-
-    // Подписка на сигналы покупки
-    _buySignalSubscription = widget.buySignalStream.listen((buySignal) {
-      if (buySignal) {
-        // Добавление специальной свечи для сигнала покупки
-        addRandomCandleData(isBuySignal: true);
-      }
+    _buySignalSubscription = widget.buySignalStream.listen((signal) {
+      _addNewCandle(signal);
     });
   }
 
-  void addRandomCandleData({bool isBuySignal = false}) {
+  void _refreshChartData() {
     setState(() {
-      final newData = getRandomCandleData(isBuySignal: isBuySignal);
-      _candleData.add(newData);
-      // Ограничение количества данных на графике
-      if (_candleData.length > 20) {
-        _candleData.removeAt(0);
-      }
+      _chartData.clear();
+      _chartData = getInitialChartData();
+      _chartSeriesController.updateDataSource(
+        addedDataIndex: _chartData.length - 1,
+        removedDataIndex: 0,
+      );
     });
   }
+  // @override
+  // void initState() {
+  //   _chartData = getInitialChartData();
+  //   _timer = Timer.periodic(const Duration(seconds: 1), _updateDataSource);
+  //   context.read<CurrencyPairCubit>().stream.listen((_) {
+  //     _refreshChartData();
+  //   });
+  //   super.initState();
+  //   _buySignalSubscription = widget.buySignalStream.listen((_) {
+  //     DateTime currentTime = DateTime.now();
+  //     double randomValue =
+  //         Random().nextDouble() * (0.91785 - 0.91755) + 0.91755;
+  //     Color randomColor = Random().nextBool() ? BiColors.red : BiColors.green;
+  //     ChartData newPoint =
+  //         ChartData(currentTime, randomValue, randomColor, true);
+  //     setState(
+  //       () {
+  //         if (randomColor == BiColors.green) {
+  //           // Если цвет зеленый, удваиваем баланс
+  //           double currentBalance = UserPreferences.getBalance();
+  //           UserPreferences.setBalance(
+  //             currentBalance + (widget.selectedAmount * 2),
+  //           );
+  //           UserPreferences.setBalance(
+  //                   currentBalance + (widget.selectedAmount * 2))
+  //               .then((_) {
+  //             BlocProvider.of<BalanceCubit>(context)
+  //                 .updateBalance(currentBalance + (widget.selectedAmount * 2));
+  //           });
+  //         } else {}
+  //         _chartData.add(newPoint);
+  //         _chartSeriesController.updateDataSource(
+  //           addedDataIndex: _chartData.length - 1,
+  //         );
+  //       },
+  //     );
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -63,67 +98,95 @@ class _CandleChartState extends State<CandleChart> {
     super.dispose();
   }
 
+  List<ChartData> getInitialChartData() {
+    List<ChartData> chartData = [];
+    DateTime now = DateTime.now();
+    for (int i = 0; i < 20; i++) {
+      final open = Random().nextDouble() * (0.91785 - 0.91755) + 0.91755;
+      final close = Random().nextDouble() * (0.91785 - 0.91755) + 0.91755;
+      final high = max(open, close) + Random().nextDouble() * 0.0001;
+      final low = min(open, close) - Random().nextDouble() * 0.0001;
+      chartData.add(ChartData(
+          now.subtract(Duration(minutes: i)), open, high, low, close, 1000));
+    }
+    return chartData.reversed.toList();
+  }
+
+  void _updateDataSource(Timer timer) {
+    final DateTime now = DateTime.now();
+    final double open = Random().nextDouble() * (0.91785 - 0.91755) + 0.91755;
+    final double close = Random().nextDouble() * (0.91785 - 0.91755) + 0.91755;
+    final double high = max(open, close) + Random().nextDouble() * 0.0001;
+    final double low = min(open, close) - Random().nextDouble() * 0.0001;
+    final ChartData newCandle = ChartData(now, open, high, low, close, 1000);
+
+    setState(() {
+      _chartData.add(newCandle);
+      _chartSeriesController.updateDataSource(
+        addedDataIndexes: [_chartData.length - 1],
+      );
+      if (_chartData.length > 20) {
+        _chartData.removeAt(0);
+        _chartSeriesController.updateDataSource(
+          removedDataIndexes: [0],
+        );
+      }
+    });
+  }
+
+  void _addNewCandle(bool signal) {
+    final DateTime now = DateTime.now();
+    final double open = Random().nextDouble() * (0.91785 - 0.91755) + 0.91755;
+    final double close = Random().nextDouble() * (0.91785 - 0.91755) + 0.91755;
+    final double high = max(open, close) + Random().nextDouble() * 0.0001;
+    final double low = min(open, close) - Random().nextDouble() * 0.0001;
+    final ChartData newCandle = ChartData(now, open, high, low, close, 1000);
+
+    setState(() {
+      _chartData.add(newCandle);
+      _chartSeriesController.updateDataSource(
+        addedDataIndexes: [_chartData.length - 1],
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SfCartesianChart(
-      series: <CandleSeries>[
-        CandleSeries<CandleData, DateTime>(
-          dataSource: _candleData,
-          xValueMapper: (CandleData data, _) => data.time,
-          lowValueMapper: (CandleData data, _) => data.low,
-          highValueMapper: (CandleData data, _) => data.high,
-          openValueMapper: (CandleData data, _) => data.open,
-          closeValueMapper: (CandleData data, _) => data.close,
+      series: <ChartSeries>[
+        CandleSeries<ChartData, DateTime>(
+          dataSource: _chartData,
+          xValueMapper: (ChartData data, _) => data.time,
+          lowValueMapper: (ChartData data, _) => data.low,
+          highValueMapper: (ChartData data, _) => data.high,
+          openValueMapper: (ChartData data, _) => data.open,
+          closeValueMapper: (ChartData data, _) => data.close,
+          onRendererCreated: (ChartSeriesController controller) {
+            _chartSeriesController = controller;
+          },
         ),
       ],
       primaryXAxis: DateTimeAxis(
+        edgeLabelPlacement: EdgeLabelPlacement.shift,
         dateFormat: DateFormat.Hm(),
         intervalType: DateTimeIntervalType.minutes,
         majorGridLines: const MajorGridLines(width: 0),
       ),
       primaryYAxis: NumericAxis(
-        numberFormat: NumberFormat.simpleCurrency(decimalDigits: 5),
-        interval: 0.0001,
+        axisLine: const AxisLine(width: 0),
+        majorTickLines: const MajorTickLines(size: 0),
       ),
     );
   }
-
-  List<CandleData> getCandleData() {
-    final List<CandleData> data = [];
-    for (int i = 0; i < 20; i++) {
-      data.add(getRandomCandleData());
-    }
-    return data;
-  }
-
-  CandleData getRandomCandleData({bool isBuySignal = false}) {
-    final DateTime now =
-        DateTime.now().subtract(Duration(seconds: _candleData.length));
-    final Random random = Random();
-    final double open = random.nextDouble() * (0.91785 - 0.91755) + 0.91755;
-    final double close = random.nextDouble() * (0.91785 - 0.91755) + 0.91755;
-    final double high = max(open, close) + random.nextDouble() * 0.0001;
-    final double low = min(open, close) - random.nextDouble() * 0.0001;
-    // Можно добавить логику изменения данных на основе
-    // ...продолжение getRandomCandleData
-    // Можно добавить логику изменения данных на основе isBuySignal
-    return CandleData(
-        time: now, open: open, high: high, low: low, close: close);
-  }
 }
 
-class CandleData {
-  CandleData({
-    required this.time,
-    required this.open,
-    required this.high,
-    required this.low,
-    required this.close,
-  });
-
+class ChartData {
   final DateTime time;
   final double open;
   final double high;
   final double low;
   final double close;
+  final double volume;
+
+  ChartData(this.time, this.open, this.high, this.low, this.close, this.volume);
 }
