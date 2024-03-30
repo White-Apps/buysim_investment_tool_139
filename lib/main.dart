@@ -26,39 +26,37 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GetTradeCubit(TradeRepoImpl()),
-      child: ScreenUtilInit(
-        designSize: const Size(375, 812),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: (_, child) => MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => PlusCurCubitIUGBSD(),
-            ),
-            BlocProvider(
-              create: (_) => ChartCubit(),
-            ),
-            BlocProvider(
-              create: (context) => BalanceCubit(),
-            ),
-            BlocProvider(
-              create: (context) => CurrencyPairCubit(),
-            ),
-          ],
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'BuySim: Investment Tool',
-            home: child,
-            theme: ThemeData(
-              splashColor: Colors.transparent,
-              splashFactory: NoSplash.splashFactory,
-              highlightColor: Colors.transparent,
-              scaffoldBackgroundColor: BiColors.blue19173D,
-              appBarTheme: const AppBarTheme(
-                backgroundColor: BiColors.blue19173D,
-              ),
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (_, child) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => PlusCurCubitIUGBSD(),
+          ),
+          BlocProvider(
+            create: (_) => ChartCubit(),
+          ),
+          BlocProvider(
+            create: (context) => BalanceCubit(),
+          ),
+          BlocProvider(
+            create: (context) => CurrencyPairCubit(),
+          ),
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'BuySim: Investment Tool',
+          home: child,
+          theme: ThemeData(
+            fontFamily: 'SFProDisplay',
+            splashColor: Colors.transparent,
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+            scaffoldBackgroundColor: BiColors.blue19173D,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: BiColors.blue19173D,
             ),
           ),
         ),
