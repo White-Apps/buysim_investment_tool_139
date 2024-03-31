@@ -75,22 +75,40 @@ Future bottomShet(BuildContext context, StatisticsModel modelDetail, int port) {
                           (element) => element.title == modelDetail.nameCompany,
                         )
                         .toList();
-                    return Expanded(
-                      child: ListView.separated(
-                        itemBuilder: (context, index) {
-                          return BottomSheetItem(
-                            time: DateFormat('dd.MM.yyyy hh:mm')
-                                .format(modelNew[index].date),
-                            dol:
-                                '${modelNew[index].chek ? '-' : ''}${modelNew[index].sum} USDT',
-                            isBanc: modelNew[index].chek,
+                    return modelNew.isNotEmpty
+                        ? Expanded(
+                            child: ListView.separated(
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: index == modelNew.length - 1
+                                          ? 20.r
+                                          : 0),
+                                  child: BottomSheetItem(
+                                    time: DateFormat('dd.MM.yyyy hh:mm')
+                                        .format(modelNew[index].date),
+                                    dol:
+                                        '${modelNew[index].chek ? '-' : ''}${modelNew[index].sum} USDT',
+                                    isBanc: modelNew[index].chek,
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: 12.h),
+                              itemCount: modelNew.length,
+                            ),
+                          )
+                        : Padding(
+                            padding: EdgeInsets.only(top: 100.r),
+                            child: Text(
+                              'Empty',
+                              style: TextStyle(
+                                fontSize: 20.h,
+                                fontWeight: FontWeight.w400,
+                                color: BiColors.whate.withOpacity(0.5),
+                              ),
+                            ),
                           );
-                        },
-                        separatorBuilder: (context, index) =>
-                            SizedBox(height: 12.h),
-                        itemCount: modelNew.length,
-                      ),
-                    );
                   } else if (state is Error) {
                     return Center(child: Text('An error occurred: ${state.e}'));
                   } else {
