@@ -125,7 +125,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   SizedBox(height: 16.h),
                   const PremiItem(
                     iconPre: 'assets/icons/wallet_icon.png',
-                    titlePre: 'Get bonus 100 usdt per day',
+                    titlePre: 'Get a \$100 bonus every 24',
                   ),
                   SizedBox(height: 16.h),
                   const PremiItem(
