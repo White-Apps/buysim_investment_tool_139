@@ -103,7 +103,7 @@ class _AmountTradeWidgetState extends State<AmountTradeWidget> {
   Widget build(BuildContext context) {
     return Container(
       height: 53.h,
-      padding: EdgeInsets.all(15.w),
+      padding: EdgeInsets.symmetric(horizontal: 15.r),
       decoration: BoxDecoration(
         color: BiColors.blue262450,
         borderRadius: BorderRadius.circular(15.r),

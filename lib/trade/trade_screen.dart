@@ -396,7 +396,6 @@ class _TradeScreenState extends State<TradeScreen> {
                                   color2: const Color(0xFF0E39C6),
                                   press: () async {
                                     if (ccc == false) {
-                                      bool chek = false;
                                       double previousBalance =
                                           UserPreferences.getBalance();
                                       double currentBalance =
@@ -417,51 +416,38 @@ class _TradeScreenState extends State<TradeScreen> {
                                           Duration(minutes: timeInMinutes);
 
                                       await Future.delayed(duration);
+                                      double newBalance =
+                                          currentBalance + selectedAmount;
+                                      await UserPreferences.setBalance(
+                                          newBalance);
+                                      BlocProvider.of<BalanceCubit>(context)
+                                          .updateBalance(newBalance);
 
-                                      // _buySignalController.add(true);
+                                      _buySignalController.add(true);
 
-                                      print(balance);
-                                      print(previousBalance);
-                                      print(currentBalance);
-
-                                      // if (balance > currentBalance) {
-                                        showCustomToast(
-                                            context,
-                                            selectedAmount.toString(),
-                                            'You won:',
-                                            const Color(0xFF0DC271),
-                                            const Color(0xFF0EA7C6));
-                                        setState(() {
-                                          chek = true;
-                                        });
-                                      // } else {
-                                      //   showCustomToast(
-                                      //       context,
-                                      //       selectedAmount.toString(),
-                                      //       'You loss:',
-                                      //       const Color(0xFFC25F0D),
-                                      //       const Color(0xFFC60E27));
-                                      //   setState(() {
-                                      //     chek = false;
-                                      //   });
-                                      // }
+                                      showCustomToast(
+                                          context,
+                                          selectedAmount.toString(),
+                                          'You won:',
+                                          const Color(0xFF0DC271),
+                                          const Color(0xFF0EA7C6));
+                                      setState(() {
+                                        opacity = 1.0;
+                                      });
 
                                       TradeHiveModel tradeHiveModel =
                                           TradeHiveModel(
                                               id: DateTime.now()
                                                   .millisecondsSinceEpoch,
                                               sum: selectedAmount,
-                                              chek: chek,
+                                              chek:
+                                                  true, // Поскольку мы предполагаем выигрыш
                                               date: DateTime.now(),
                                               title: ttt);
 
                                       context
                                           .read<SetTradeCubit>()
                                           .setTrade(tradeHiveModel);
-
-                                      setState(() {
-                                        opacity = 1.0;
-                                      });
                                     }
                                   },
                                 ),
@@ -472,7 +458,6 @@ class _TradeScreenState extends State<TradeScreen> {
                                   color2: const Color(0xFFC60E27),
                                   press: () async {
                                     if (ccc == false) {
-                                      bool chek = false;
                                       double previousBalance =
                                           UserPreferences.getBalance();
                                       double currentBalance =
@@ -507,15 +492,13 @@ class _TradeScreenState extends State<TradeScreen> {
                                       //     chek = true;
                                       //   });
                                       // } else {
-                                        showCustomToast(
-                                            context,
-                                            selectedAmount.toString(),
-                                            'You loss:',
-                                            const Color(0xFFC25F0D),
-                                            const Color(0xFFC60E27));
-                                        setState(() {
-                                          chek = false;
-                                        });
+                                      showCustomToast(
+                                          context,
+                                          selectedAmount.toString(),
+                                          'You loss:',
+                                          const Color(0xFFC25F0D),
+                                          const Color(0xFFC60E27));
+
                                       // }
 
                                       TradeHiveModel tradeHiveModel =
@@ -523,7 +506,7 @@ class _TradeScreenState extends State<TradeScreen> {
                                               id: DateTime.now()
                                                   .millisecondsSinceEpoch,
                                               sum: selectedAmount,
-                                              chek: chek,
+                                              chek: true,
                                               date: DateTime.now(),
                                               title: ttt);
 
