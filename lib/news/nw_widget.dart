@@ -3,7 +3,10 @@ import 'dart:math';
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
 import 'package:buysim_investment_tool_137/core/bi_motin.dart';
 import 'package:buysim_investment_tool_137/news/nw_cont.dart';
+import 'package:buysim_investment_tool_137/trade/cubit/balance_cubit.dart';
+import 'package:buysim_investment_tool_137/trade/widget/methos.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NwWidget extends StatefulWidget {
@@ -20,7 +23,7 @@ class _NwWidgetState extends State<NwWidget> {
   String selectedAnswer = '';
   int usdt = 0;
   int getRandomSteps() {
-    return Random().nextInt(1000 - 200) + 200;
+    return Random().nextInt(10 - 5) + 5;
   }
 
   @override
@@ -29,7 +32,7 @@ class _NwWidgetState extends State<NwWidget> {
     super.initState();
   }
 
-  void checkSelectedAnswer() {
+  void checkSelectedAnswer() async {
     if (selectedAnswer == answerTrue) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -58,6 +61,10 @@ class _NwWidgetState extends State<NwWidget> {
           duration: const Duration(seconds: 2),
         ),
       );
+      double previousBalance = UserPreferences.getBalance();
+      double currentBalance = previousBalance + usdt;
+      await UserPreferences.setBalance(currentBalance);
+      BlocProvider.of<BalanceCubit>(context).updateBalance(currentBalance);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
