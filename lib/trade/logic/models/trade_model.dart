@@ -12,11 +12,14 @@ class TradeHiveModel extends HiveObject {
   bool chek;
   @HiveField(3)
   DateTime date;
+  @HiveField(4)
+  String title;
 
   TradeHiveModel({
     required this.id,
     required this.sum,
     required this.chek,
     required this.date,
+    required this.title,
   });
 }

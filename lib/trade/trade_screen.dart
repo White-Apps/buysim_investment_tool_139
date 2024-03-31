@@ -448,7 +448,8 @@ class _TradeScreenState extends State<TradeScreen> {
                                               .millisecondsSinceEpoch,
                                           sum: selectedAmount,
                                           chek: chek,
-                                          date: DateTime.now());
+                                          date: DateTime.now(),
+                                          title: ttt);
 
                                   context
                                       .read<SetTradeCubit>()
@@ -522,7 +523,8 @@ class _TradeScreenState extends State<TradeScreen> {
                                               .millisecondsSinceEpoch,
                                           sum: selectedAmount,
                                           chek: chek,
-                                          date: DateTime.now());
+                                          date: DateTime.now(),
+                                          title: ttt);
 
                                   context
                                       .read<SetTradeCubit>()
