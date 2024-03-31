@@ -1,5 +1,6 @@
 import 'package:buysim_investment_tool_137/statistics/model/statistics_model.dart';
 import 'package:buysim_investment_tool_137/trade/logic/cubits/get_trade_cubit/get_trade_cubit.dart';
+import 'package:buysim_investment_tool_137/trade/logic/models/trade_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -69,19 +70,25 @@ Future bottomShet(BuildContext context, StatisticsModel modelDetail, int port) {
                     return const CircularProgressIndicator();
                   } else if (state is Success) {
                     final model = state.model;
+                    List<TradeHiveModel> modelNew = model
+                        .where(
+                          (element) => element.title == modelDetail.nameCompany,
+                        )
+                        .toList();
                     return Expanded(
                       child: ListView.separated(
                         itemBuilder: (context, index) {
                           return BottomSheetItem(
                             time: DateFormat('dd.MM.yyyy hh:mm')
-                                .format(model[index].date),
-                            dol: '${model[index].sum} USDT',
-                            isBanc: model[index].chek,
+                                .format(modelNew[index].date),
+                            dol:
+                                '${modelNew[index].chek ? '-' : ''}${modelNew[index].sum} USDT',
+                            isBanc: modelNew[index].chek,
                           );
                         },
                         separatorBuilder: (context, index) =>
                             SizedBox(height: 12.h),
-                        itemCount: model.length,
+                        itemCount: modelNew.length,
                       ),
                     );
                   } else if (state is Error) {
