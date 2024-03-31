@@ -1,7 +1,9 @@
 import 'package:buysim_investment_tool_137/core/bi_dc.dart';
 import 'package:buysim_investment_tool_137/core/web_vieww.dart';
 import 'package:buysim_investment_tool_137/premium/pre_scr.dart';
+import 'package:buysim_investment_tool_137/settings/buysim_investment_prenvdf.dart';
 import 'package:buysim_investment_tool_137/settings/widget/sett_item.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
@@ -24,81 +26,34 @@ class SettingsScreen extends StatelessWidget {
             ),
           ),
         ),
-        // actions: [
-        //   Padding(
-        //     padding: EdgeInsets.only(right: 8.w),
-        //     child: BiMotion(
-        //       onPressed: () {},
-        //       child: Container(
-        //         decoration: BoxDecoration(
-        //           color: const Color.fromARGB(255, 25, 29, 71),
-        //           borderRadius: BorderRadius.circular(20.r),
-        //           border: Border.all(
-        //             color: const Color.fromARGB(255, 69, 73, 129),
-        //             width: 0.7,
-        //           ),
-        //         ),
-        //         child: Padding(
-        //           padding:   EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
-        //           child: Row(
-        //             children: [
-        //               Image.asset(
-        //                 'assets/icons/wallet_icon.png',
-        //                 width: 21.w,
-        //               ),
-        //               SizedBox(width: 10.w),
-        //               Column(
-        //                 crossAxisAlignment: CrossAxisAlignment.start,
-        //                 mainAxisAlignment: MainAxisAlignment.center,
-        //                 children: [
-        //                   Text(
-        //                     '500 USDT',
-        //                     style: TextStyle(
-        //                       fontSize: 14.h,
-        //                       fontWeight: FontWeight.w500,
-        //                       color: BiColors.whate,
-        //                       height: 0,
-        //                     ),
-        //                   ),
-        //                   Text(
-        //                     'your balance',
-        //                     style: TextStyle(
-        //                       fontSize: 12.h,
-        //                       fontWeight: FontWeight.w500,
-        //                       color: BiColors.blue7B78AA,
-        //                       height: 0,
-        //                     ),
-        //                   ),
-        //                 ],
-        //               )
-        //             ],
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
           children: [
-            Settingsitem(
-              width: 24.w,
-              iconSet: 'assets/icons/premium_icon.png',
-              titleSet: 'Get Premium',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PremiumScreen(
-                      isClose: true,
-                    ),
-                  ),
-                );
-              },
-              isActivColor: true,
-            ),
+            FutureBuilder(
+                future: getBuysimInvestmentPedf(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && !snapshot.data!) {
+                    return Settingsitem(
+                      width: 24.w,
+                      iconSet: 'assets/icons/premium_icon.png',
+                      titleSet: 'Get Premium',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PremiumScreen(
+                              isClose: true,
+                            ),
+                          ),
+                        );
+                      },
+                      isActivColor: true,
+                    );
+                  }
+                  return const SizedBox();
+                }),
             Settingsitem(
               width: 23.w,
               iconSet: 'assets/icons/1_icon.png',
@@ -151,7 +106,9 @@ class SettingsScreen extends StatelessWidget {
               width: 23.w,
               iconSet: 'assets/icons/4_icon.png',
               titleSet: 'Restore',
-              onPressed: () {},
+              onPressed: () {
+                restoreBuysimInvestmentPedf(context);
+              },
             ),
           ],
         ),

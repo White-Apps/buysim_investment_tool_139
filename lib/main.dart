@@ -12,6 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:apphud/apphud.dart';
+
+import 'core/bi_dc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +22,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TradeHiveModelAdapter());
   runApp(const MyApp());
+   await Apphud.start(apiKey: DocFF.bsdswqw);
 }
 
 class MyApp extends StatelessWidget {

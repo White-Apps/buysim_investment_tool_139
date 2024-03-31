@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.7.0"
+  apphud:
+    dependency: "direct main"
+    description:
+      name: apphud
+      sha256: ff0f8ea3dfc52a990fdb40961cd8c086cd6bfc7d5c9a1e1c4a46658c0521054d
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.4"
   args:
     dependency: transitive
     description:

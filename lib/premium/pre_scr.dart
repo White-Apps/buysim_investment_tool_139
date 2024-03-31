@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:apphud/apphud.dart';
 import 'package:buysim_investment_tool_137/premium/widget/prem_it_wid.dart';
+import 'package:buysim_investment_tool_137/settings/buysim_investment_prenvdf.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,6 +20,7 @@ class PremiumScreen extends StatefulWidget {
 }
 
 class _PremiumScreenState extends State<PremiumScreen> {
+  bool iiiwev = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +56,9 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   ),
                   const Spacer(),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      restoreBuysimInvestmentPedf(context);
+                    },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -132,16 +138,32 @@ class _PremiumScreenState extends State<PremiumScreen> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 50.w),
               child: BiMotion(
-                onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const BiBottomBar(
-                        indexScr: 0,
-                      ),
-                    ),
-                    (protected) => false,
+                onPressed: () async {
+                  setState(() {
+                    iiiwev = true;
+                  });
+                  final apphudPaywalls = await Apphud.paywalls();
+                  // print(apphudPaywalls?.paywalls.first.products?.first);
+                  await Apphud.purchase(
+                    product: apphudPaywalls?.paywalls.first.products?.first,
+                  ).whenComplete(
+                    () async {
+                      if (await Apphud.hasPremiumAccess() ||
+                          await Apphud.hasActiveSubscription()) {
+                        await setBuysimInvestmentPedf();
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const BiBottomBar(),
+                          ),
+                          (route) => false,
+                        );
+                      }
+                    },
                   );
+                  setState(() {
+                    iiiwev = false;
+                  });
                 },
                 child: Container(
                   width: double.infinity,
@@ -166,14 +188,17 @@ class _PremiumScreenState extends State<PremiumScreen> {
                       vertical: 18.h,
                     ),
                     child: Center(
-                      child: Text(
-                        'Buy Premium \$0.99',
-                        style: TextStyle(
-                          color: BiColors.whate,
-                          fontSize: 15.h,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      child: iiiwev
+                          ? const CupertinoActivityIndicator(
+                              color: Colors.white)
+                          : Text(
+                              'Buy Premium \$0.99',
+                              style: TextStyle(
+                                color: BiColors.whate,
+                                fontSize: 15.h,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                     ),
                   ),
                 ),
