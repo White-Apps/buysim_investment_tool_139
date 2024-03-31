@@ -365,183 +365,186 @@ class _TradeScreenState extends State<TradeScreen> {
                 ],
               ),
               SizedBox(height: 21.h),
-              BlocProvider(
-                create: (context) => SetTradeCubit(TradeRepoImpl()),
-                child: BlocConsumer<SetTradeCubit, SetTradeState>(
-                  listener: (context, state) {
-                    if (state is Success) {
-                    } else if (state is Error) {
-                      final errorMessage = state.e;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Error: $errorMessage')),
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is Loading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    return AbsorbPointer(
-                      absorbing: opacity < 1.0,
-                      child: Opacity(
-                        opacity: opacity,
-                        child: Row(
-                          children: [
-                            ZenusButton(
-                              text: 'BUY',
-                              color1: const Color(0xFF0DA6C2),
-                              color2: const Color(0xFF0E39C6),
-                              press: () async {
-                                if (ccc == false) {
-                                  bool chek = false;
-                                  double previousBalance =
-                                      UserPreferences.getBalance();
-                                  double currentBalance =
-                                      previousBalance - selectedAmount;
-                                  await UserPreferences.setBalance(
-                                      currentBalance);
-                                  BlocProvider.of<BalanceCubit>(context)
-                                      .updateBalance(currentBalance);
+              BlocBuilder<BalanceCubit, double>(
+                builder: (context, balance) {
+                  return BlocProvider(
+                    create: (context) => SetTradeCubit(TradeRepoImpl()),
+                    child: BlocConsumer<SetTradeCubit, SetTradeState>(
+                      listener: (context, state) {
+                        if (state is Success) {
+                        } else if (state is Error) {
+                          final errorMessage = state.e;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error: $errorMessage')),
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state is Loading) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        return AbsorbPointer(
+                          absorbing: opacity < 1.0,
+                          child: Opacity(
+                            opacity: opacity,
+                            child: Row(
+                              children: [
+                                ZenusButton(
+                                  text: 'BUY',
+                                  color1: const Color(0xFF0DA6C2),
+                                  color2: const Color(0xFF0E39C6),
+                                  press: () async {
+                                    if (ccc == false) {
+                                      bool chek = false;
+                                      double previousBalance =
+                                          UserPreferences.getBalance();
+                                      double currentBalance =
+                                          previousBalance - selectedAmount;
+                                      await UserPreferences.setBalance(
+                                          currentBalance);
+                                      BlocProvider.of<BalanceCubit>(context)
+                                          .updateBalance(currentBalance);
 
-                                  setState(() {
-                                    opacity = 0.5;
-                                  });
+                                      setState(() {
+                                        opacity = 0.5;
+                                      });
 
-                                  int timeInMinutes = int.tryParse(
-                                          selectedTime.split(' ')[0]) ??
-                                      1;
-                                  Duration duration =
-                                      Duration(minutes: timeInMinutes);
+                                      int timeInMinutes = int.tryParse(
+                                              selectedTime.split(' ')[0]) ??
+                                          1;
+                                      Duration duration =
+                                          Duration(minutes: timeInMinutes);
 
-                                  await Future.delayed(duration);
+                                      await Future.delayed(duration);
 
-                                  _buySignalController.add(true);
+                                      // _buySignalController.add(true);
 
-                                  double newBalance = UserPreferences
-                                      .getBalance(); // Предположим, что баланс может измениться в результате других операций
+                                      print(balance);
+                                      print(previousBalance);
+                                      print(currentBalance);
 
-                                  if (newBalance > previousBalance) {
-                                    showCustomToast(
-                                        context,
-                                        selectedAmount.toString(),
-                                        'You won:',
-                                        const Color(0xFF0DC271),
-                                        const Color(0xFF0EA7C6));
-                                    setState(() {
-                                      chek = true;
-                                    });
-                                  } else {
-                                    showCustomToast(
-                                        context,
-                                        selectedAmount.toString(),
-                                        'You loss:',
-                                        const Color(0xFFC25F0D),
-                                        const Color(0xFFC60E27));
-                                    setState(() {
-                                      chek = false;
-                                    });
-                                  }
+                                      // if (balance > currentBalance) {
+                                        showCustomToast(
+                                            context,
+                                            selectedAmount.toString(),
+                                            'You won:',
+                                            const Color(0xFF0DC271),
+                                            const Color(0xFF0EA7C6));
+                                        setState(() {
+                                          chek = true;
+                                        });
+                                      // } else {
+                                      //   showCustomToast(
+                                      //       context,
+                                      //       selectedAmount.toString(),
+                                      //       'You loss:',
+                                      //       const Color(0xFFC25F0D),
+                                      //       const Color(0xFFC60E27));
+                                      //   setState(() {
+                                      //     chek = false;
+                                      //   });
+                                      // }
 
-                                  TradeHiveModel tradeHiveModel =
-                                      TradeHiveModel(
-                                          id: DateTime.now()
-                                              .millisecondsSinceEpoch,
-                                          sum: selectedAmount,
-                                          chek: chek,
-                                          date: DateTime.now(),
-                                          title: ttt);
+                                      TradeHiveModel tradeHiveModel =
+                                          TradeHiveModel(
+                                              id: DateTime.now()
+                                                  .millisecondsSinceEpoch,
+                                              sum: selectedAmount,
+                                              chek: chek,
+                                              date: DateTime.now(),
+                                              title: ttt);
 
-                                  context
-                                      .read<SetTradeCubit>()
-                                      .setTrade(tradeHiveModel);
+                                      context
+                                          .read<SetTradeCubit>()
+                                          .setTrade(tradeHiveModel);
 
-                                  setState(() {
-                                    opacity = 1.0;
-                                  });
-                                }
-                              },
+                                      setState(() {
+                                        opacity = 1.0;
+                                      });
+                                    }
+                                  },
+                                ),
+                                SizedBox(width: 8.w),
+                                ZenusButton(
+                                  text: 'SELL',
+                                  color1: const Color(0xFFC25F0D),
+                                  color2: const Color(0xFFC60E27),
+                                  press: () async {
+                                    if (ccc == false) {
+                                      bool chek = false;
+                                      double previousBalance =
+                                          UserPreferences.getBalance();
+                                      double currentBalance =
+                                          previousBalance - selectedAmount;
+                                      await UserPreferences.setBalance(
+                                          currentBalance);
+                                      BlocProvider.of<BalanceCubit>(context)
+                                          .updateBalance(currentBalance);
+
+                                      setState(() {
+                                        opacity = 0.5;
+                                      });
+
+                                      int timeInMinutes = int.tryParse(
+                                              selectedTime.split(' ')[0]) ??
+                                          1;
+                                      Duration duration =
+                                          Duration(minutes: timeInMinutes);
+
+                                      await Future.delayed(duration);
+
+                                      // _buySignalController.add(true);
+
+                                      // if (balance > previousBalance) {
+                                      //   showCustomToast(
+                                      //       context,
+                                      //       selectedAmount.toString(),
+                                      //       'You won:',
+                                      //       const Color(0xFF0DC271),
+                                      //       const Color(0xFF0EA7C6));
+                                      //   setState(() {
+                                      //     chek = true;
+                                      //   });
+                                      // } else {
+                                        showCustomToast(
+                                            context,
+                                            selectedAmount.toString(),
+                                            'You loss:',
+                                            const Color(0xFFC25F0D),
+                                            const Color(0xFFC60E27));
+                                        setState(() {
+                                          chek = false;
+                                        });
+                                      // }
+
+                                      TradeHiveModel tradeHiveModel =
+                                          TradeHiveModel(
+                                              id: DateTime.now()
+                                                  .millisecondsSinceEpoch,
+                                              sum: selectedAmount,
+                                              chek: chek,
+                                              date: DateTime.now(),
+                                              title: ttt);
+
+                                      context
+                                          .read<SetTradeCubit>()
+                                          .setTrade(tradeHiveModel);
+
+                                      setState(() {
+                                        opacity = 1.0;
+                                      });
+                                    }
+                                  },
+                                ),
+                              ],
                             ),
-                            SizedBox(width: 8.w),
-                            ZenusButton(
-                              text: 'SELL',
-                              color1: const Color(0xFFC25F0D),
-                              color2: const Color(0xFFC60E27),
-                              press: () async {
-                                if (ccc == false) {
-                                  bool chek = false;
-                                  double previousBalance =
-                                      UserPreferences.getBalance();
-                                  double currentBalance =
-                                      previousBalance - selectedAmount;
-                                  await UserPreferences.setBalance(
-                                      currentBalance);
-                                  BlocProvider.of<BalanceCubit>(context)
-                                      .updateBalance(currentBalance);
-
-                                  setState(() {
-                                    opacity = 0.5;
-                                  });
-
-                                  int timeInMinutes = int.tryParse(
-                                          selectedTime.split(' ')[0]) ??
-                                      1;
-                                  Duration duration =
-                                      Duration(minutes: timeInMinutes);
-
-                                  await Future.delayed(duration);
-
-                                  _buySignalController.add(true);
-
-                                  double newBalance = UserPreferences
-                                      .getBalance(); // Предположим, что баланс может измениться в результате других операций
-
-                                  if (newBalance > previousBalance) {
-                                    showCustomToast(
-                                        context,
-                                        selectedAmount.toString(),
-                                        'You won:',
-                                        const Color(0xFF0DC271),
-                                        const Color(0xFF0EA7C6));
-                                    setState(() {
-                                      chek = true;
-                                    });
-                                  } else {
-                                    showCustomToast(
-                                        context,
-                                        selectedAmount.toString(),
-                                        'You loss:',
-                                        const Color(0xFFC25F0D),
-                                        const Color(0xFFC60E27));
-                                    setState(() {
-                                      chek = false;
-                                    });
-                                  }
-
-                                  TradeHiveModel tradeHiveModel =
-                                      TradeHiveModel(
-                                          id: DateTime.now()
-                                              .millisecondsSinceEpoch,
-                                          sum: selectedAmount,
-                                          chek: chek,
-                                          date: DateTime.now(),
-                                          title: ttt);
-
-                                  context
-                                      .read<SetTradeCubit>()
-                                      .setTrade(tradeHiveModel);
-
-                                  setState(() {
-                                    opacity = 1.0;
-                                  });
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
               SizedBox(height: 16.h),
             ],
