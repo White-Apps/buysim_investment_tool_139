@@ -1,4 +1,4 @@
-import 'package:buysim_investment_tool_137/core/urls.dart';
+import 'package:buysim_investment_tool_137/core/bi_dc.dart';
 import 'package:buysim_investment_tool_137/core/web_vieww.dart';
 import 'package:buysim_investment_tool_137/premium/pre_scr.dart';
 import 'package:buysim_investment_tool_137/settings/widget/sett_item.dart';

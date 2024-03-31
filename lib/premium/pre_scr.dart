@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
 import 'package:buysim_investment_tool_137/core/bi_motin.dart';
 import 'package:buysim_investment_tool_137/core/con_bar.dart';
-import 'package:buysim_investment_tool_137/core/urls.dart';
+import 'package:buysim_investment_tool_137/core/bi_dc.dart';
 import 'package:buysim_investment_tool_137/core/web_vieww.dart';
 
 class PremiumScreen extends StatefulWidget {

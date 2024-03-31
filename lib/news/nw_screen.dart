@@ -9,14 +9,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class NewsScreen extends StatefulWidget {
-  const NewsScreen({super.key});
+class NwScreen extends StatefulWidget {
+  const NwScreen({super.key});
 
   @override
-  _NewsScreenState createState() => _NewsScreenState();
+  _NwScreenState createState() => _NwScreenState();
 }
 
-class _NewsScreenState extends State<NewsScreen> {
+class _NwScreenState extends State<NwScreen> {
   late Timer _timer;
   late int _timeLeftInSeconds;
   int _lastNewsIndex = 0;
