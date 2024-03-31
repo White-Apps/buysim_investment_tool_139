@@ -1,13 +1,19 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
 import 'package:buysim_investment_tool_137/core/bi_motin.dart';
 import 'package:buysim_investment_tool_137/news/nw_cont.dart';
+import 'package:buysim_investment_tool_137/premium/pre_scr.dart';
+import 'package:buysim_investment_tool_137/settings/buysim_investment_prenvdf.dart';
 import 'package:buysim_investment_tool_137/trade/cubit/balance_cubit.dart';
 import 'package:buysim_investment_tool_137/trade/widget/methos.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class NwWidget extends StatefulWidget {
   const NwWidget({super.key, required this.model});
@@ -147,54 +153,173 @@ class _NwWidgetState extends State<NwWidget> {
           ),
         ),
         SizedBox(height: 16.h),
-        buildOptionContainer(
-            0, 'a) ${listAns[0]}'), // Call function for each option
-        SizedBox(height: 10.h),
-        buildOptionContainer(1, 'b) ${listAns[1]}'),
-        SizedBox(height: 10.h),
-        buildOptionContainer(2, 'c) ${listAns[2]}'),
-        SizedBox(height: 10.h),
-        buildOptionContainer(3, 'd) ${listAns[3]}'),
-        SizedBox(height: 16.h),
-        BiMotion(
-          onPressed: () {
-            if (answerTrue.isEmpty) {
-              setState(() {
-                answerTrue = widget.model.answer;
-                checkSelectedAnswer(); // Call function to check answer
-              });
-            }
-          },
-          child: Container(
-            padding: EdgeInsets.all(20.r),
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: <Color>[
-                  Color(0xff0DA6C2),
-                  Color(0xff0E39C6),
-                ],
-              ),
-              color: const Color.fromARGB(255, 25, 29, 71),
-              borderRadius: BorderRadius.circular(50.h),
-              border: Border.all(
-                color: const Color(0xff0DA6C2),
-              ),
-            ),
-            child: Center(
-              child: Text(
-                'Confirm Answer',
-                style: TextStyle(
-                  fontSize: 16.h,
-                  fontWeight: FontWeight.w500,
-                  color: BiColors.whate,
-                ),
-              ),
-            ),
-          ),
-        ),
+        FutureBuilder(
+            future: getBuysimInvestmentPedf(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (!snapshot.data!) {
+                  return Stack(
+                    children: [
+                      IgnorePointer(
+                        child: Opacity(
+                          opacity: 0.5,
+                          child: ImageFiltered(
+                            imageFilter:
+                                ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                            child: Column(
+                              children: [
+                                buildOptionContainer(0,
+                                    'a) ${listAns[0]}'), // Call function for each option
+                                SizedBox(height: 10.h),
+                                buildOptionContainer(1, 'b) ${listAns[1]}'),
+                                SizedBox(height: 10.h),
+                                buildOptionContainer(2, 'c) ${listAns[2]}'),
+                                SizedBox(height: 10.h),
+                                buildOptionContainer(3, 'd) ${listAns[3]}'),
+                                SizedBox(height: 16.h),
+                                BiMotion(
+                                  onPressed: () {
+                                    if (answerTrue.isEmpty) {
+                                      setState(() {
+                                        answerTrue = widget.model.answer;
+                                        checkSelectedAnswer(); // Call function to check answer
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(20.r),
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: <Color>[
+                                          Color(0xff0DA6C2),
+                                          Color(0xff0E39C6),
+                                        ],
+                                      ),
+                                      color:
+                                          const Color.fromARGB(255, 25, 29, 71),
+                                      borderRadius: BorderRadius.circular(50.h),
+                                      border: Border.all(
+                                        color: const Color(0xff0DA6C2),
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Confirm Answer',
+                                        style: TextStyle(
+                                          fontSize: 16.h,
+                                          fontWeight: FontWeight.w500,
+                                          color: BiColors.whate,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned.fill(
+                        child: Center(
+                          child: IntrinsicHeight(
+                            child: BiMotion(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const PremiumScreen(isClose: true),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.all(20.r),
+                                decoration: BoxDecoration(
+                                  color: BiColors.yellowfe9900,
+                                  borderRadius: BorderRadius.circular(20.r),
+                                  border: Border.all(
+                                    color:
+                                        const Color.fromARGB(255, 54, 58, 113),
+                                    width: 0.7,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Get Premium to unlock tests',
+                                    style: TextStyle(
+                                      fontSize: 16.h,
+                                      fontWeight: FontWeight.w600,
+                                      color: BiColors.whate,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                return Column(
+                  children: [
+                    buildOptionContainer(
+                        0, 'a) ${listAns[0]}'), // Call function for each option
+                    SizedBox(height: 10.h),
+                    buildOptionContainer(1, 'b) ${listAns[1]}'),
+                    SizedBox(height: 10.h),
+                    buildOptionContainer(2, 'c) ${listAns[2]}'),
+                    SizedBox(height: 10.h),
+                    buildOptionContainer(3, 'd) ${listAns[3]}'),
+                    SizedBox(height: 16.h),
+                    BiMotion(
+                      onPressed: () {
+                        if (answerTrue.isEmpty) {
+                          setState(() {
+                            answerTrue = widget.model.answer;
+                            checkSelectedAnswer(); // Call function to check answer
+                          });
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(20.r),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: <Color>[
+                              Color(0xff0DA6C2),
+                              Color(0xff0E39C6),
+                            ],
+                          ),
+                          color: const Color.fromARGB(255, 25, 29, 71),
+                          borderRadius: BorderRadius.circular(50.h),
+                          border: Border.all(
+                            color: const Color(0xff0DA6C2),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Confirm Answer',
+                            style: TextStyle(
+                              fontSize: 16.h,
+                              fontWeight: FontWeight.w500,
+                              color: BiColors.whate,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return const SizedBox();
+            }),
         SizedBox(height: 16.h),
       ],
     );
