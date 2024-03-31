@@ -91,13 +91,24 @@ class _BiOnbordingState extends State<BiOnbording> {
                               ),
                             ),
                             SizedBox(height: 16.h),
-                            Text(
-                              'Skip',
-                              style: TextStyle(
-                                fontSize: 18.h,
-                                fontWeight: FontWeight.w400,
-                                color: BiColors.blue7B78AA,
-                                height: 0.6,
+                            BiMotion(
+                              onPressed: () {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const PremiumScreen(),
+                                  ),
+                                  (protected) => false,
+                                );
+                              },
+                              child: Text(
+                                'Skip',
+                                style: TextStyle(
+                                  fontSize: 18.h,
+                                  fontWeight: FontWeight.w400,
+                                  color: BiColors.blue7B78AA,
+                                  height: 0.6,
+                                ),
                               ),
                             ),
                           ],
