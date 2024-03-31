@@ -21,13 +21,14 @@ class TradeHiveModelAdapter extends TypeAdapter<TradeHiveModel> {
       sum: fields[1] as double,
       chek: fields[2] as bool,
       date: fields[3] as DateTime,
+      title: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, TradeHiveModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class TradeHiveModelAdapter extends TypeAdapter<TradeHiveModel> {
       ..writeByte(2)
       ..write(obj.chek)
       ..writeByte(3)
-      ..write(obj.date);
+      ..write(obj.date)
+      ..writeByte(4)
+      ..write(obj.title);
   }
 
   @override
