@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
-import 'package:buysim_investment_tool_137/core/bi_motin.dart';
 import 'package:buysim_investment_tool_137/trade/widget/methos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
