@@ -482,15 +482,15 @@ class _TradeScreenState extends State<TradeScreen> {
                                       // _buySignalController.add(true);
 
                                       // if (balance > previousBalance) {
-                                      //   showCustomToast(
-                                      //       context,
-                                      //       selectedAmount.toString(),
-                                      //       'You won:',
-                                      //       const Color(0xFF0DC271),
-                                      //       const Color(0xFF0EA7C6));
-                                      //   setState(() {
-                                      //     chek = true;
-                                      //   });
+                                        // showCustomToast(
+                                        //     context,
+                                        //     selectedAmount.toString(),
+                                        //     'You won:',
+                                        //     const Color(0xFF0DC271),
+                                        //     const Color(0xFF0EA7C6));
+                                        // setState(() {
+                                        //   chek = true;
+                                        // });
                                       // } else {
                                       showCustomToast(
                                           context,

@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:apphud/apphud.dart';
+import 'package:buysim_investment_tool_137/main.dart';
 import 'package:buysim_investment_tool_137/premium/widget/prem_it_wid.dart';
 import 'package:buysim_investment_tool_137/settings/buysim_investment_prenvdf.dart';
 import 'package:flutter/cupertino.dart';
@@ -151,6 +152,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                       if (await Apphud.hasPremiumAccess() ||
                           await Apphud.hasActiveSubscription()) {
                         await setBuysimInvestmentPedf();
+                        await serPremBool(true);
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
