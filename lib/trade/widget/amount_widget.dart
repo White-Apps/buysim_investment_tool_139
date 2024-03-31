@@ -12,8 +12,9 @@ class AmountTradeWidget extends StatefulWidget {
   const AmountTradeWidget({
     super.key,
     required this.onAmountEntered,
+    required this.ooo,
   });
-
+  final ValueChanged ooo;
   @override
   State<AmountTradeWidget> createState() => _AmountTradeWidgetState();
 }
@@ -27,78 +28,77 @@ class _AmountTradeWidgetState extends State<AmountTradeWidget> {
     _controller.text = "100";
   }
 
-  void handleTrade() {
-    double enteredAmount = double.tryParse(_controller.text) ?? 0.0;
-    double currentBalance = UserPreferences.getBalance();
-
-    if (enteredAmount > currentBalance) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-            child: AlertDialog(
-              surfaceTintColor: Colors.transparent,
-              backgroundColor: Colors.transparent,
-              content: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(16.r),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'You entered an amount greater than your balance',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w500,
-                        color: BiColors.whate,
-                      ),
-                    ),
-                    SizedBox(height: 16.h),
-                    BiMotion(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 5.r),
-                        width: MediaQuery.of(context).size.width,
-                        height: 44.h,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: <Color>[
-                              Color(0xFF3F8E00),
-                              Color(0xFFFAFF00)
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(24.r),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Change',
-                            style: TextStyle(
-                              fontSize: 16.h,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      );
-    } else {
-      widget.onAmountEntered(enteredAmount);
-    }
-  }
-
+  // void handleTrade() {
+  //   double enteredAmount = double.tryParse(_controller.text) ?? 0.0;
+  //   double currentBalance = UserPreferences.getBalance();
+  //   if (enteredAmount > currentBalance) {
+  //     showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return BackdropFilter(
+  //           filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+  //           child: AlertDialog(
+  //             surfaceTintColor: Colors.transparent,
+  //             backgroundColor: Colors.transparent,
+  //             content: Container(
+  //               width: double.infinity,
+  //               padding: EdgeInsets.all(16.r),
+  //               child: Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   Text(
+  //                     'You entered an amount greater than your balance',
+  //                     textAlign: TextAlign.center,
+  //                     style: TextStyle(
+  //                       fontSize: 20.sp,
+  //                       fontWeight: FontWeight.w500,
+  //                       color: BiColors.whate,
+  //                     ),
+  //                   ),
+  //                   SizedBox(height: 16.h),
+  //                   BiMotion(
+  //                     onPressed: () {
+  //                       Navigator.of(context).pop();
+  //                     },
+  //                     child: Container(
+  //                       margin: EdgeInsets.symmetric(horizontal: 5.r),
+  //                       width: MediaQuery.of(context).size.width,
+  //                       height: 44.h,
+  //                       decoration: BoxDecoration(
+  //                         gradient: const LinearGradient(
+  //                           begin: Alignment.centerLeft,
+  //                           end: Alignment.centerRight,
+  //                           colors: <Color>[
+  //                             Color(0xFF3F8E00),
+  //                             Color(0xFFFAFF00)
+  //                           ],
+  //                         ),
+  //                         borderRadius: BorderRadius.circular(24.r),
+  //                       ),
+  //                       child: Center(
+  //                         child: Text(
+  //                           'Change',
+  //                           style: TextStyle(
+  //                             fontSize: 16.h,
+  //                             fontWeight: FontWeight.w400,
+  //                             color: Colors.white,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     );
+  //   } else {
+  //     widget.onAmountEntered(enteredAmount);
+  //   }
+  // }
+  bool ccc = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -132,9 +132,26 @@ class _AmountTradeWidgetState extends State<AmountTradeWidget> {
                 style: TextStyle(
                   fontSize: 16.h,
                   fontWeight: FontWeight.w400,
-                  color: Colors.white,
+                  color: ccc == false ? Colors.white : Colors.red,
                 ),
-                onSubmitted: (_) => handleTrade(),
+                onChanged: (value) {
+                  setState(() {
+                    double balance = UserPreferences.getBalance();
+                    double aaa = double.tryParse(_controller.text) ?? 0;
+                    if (aaa > balance) {
+                      setState(() {
+                        ccc = true;
+                        widget.ooo(ccc);
+                      });
+                    } else {
+                      setState(() {
+                        ccc = false;
+                        widget.ooo(ccc);
+                      });
+                    }
+                  });
+                },
+                // onSubmitted: (_) => handleTrade(),
               ),
             ),
           ),

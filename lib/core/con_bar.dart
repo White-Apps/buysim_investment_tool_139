@@ -1,6 +1,6 @@
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
 import 'package:buysim_investment_tool_137/core/bi_motin.dart';
-import 'package:buysim_investment_tool_137/news/news_screen.dart';
+import 'package:buysim_investment_tool_137/news/nw_screen.dart';
 import 'package:buysim_investment_tool_137/settings/setti_scre.dart';
 import 'package:buysim_investment_tool_137/statistics/statistics_screen.dart';
 import 'package:buysim_investment_tool_137/trade/trade_screen.dart';
@@ -152,7 +152,7 @@ class BiBottomBarState extends State<BiBottomBar> {
   final _pages = <Widget>[
     const TradeScreen(),
     const StatisticsScreen(),
-    const NewsScreen(),
+    const NwScreen(),
     const SettingsScreen(),
   ];
 }
