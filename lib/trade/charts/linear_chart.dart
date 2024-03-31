@@ -61,8 +61,7 @@ class _LinearChartWidgetState extends State<LinearChartWidget> {
               BlocProvider.of<BalanceCubit>(context)
                   .updateBalance(currentBalance + (widget.selectedAmount * 2));
             });
-          } else {
-          }
+          } else {}
           _chartData.add(newPoint);
           _chartSeriesController.updateDataSource(
             addedDataIndex: _chartData.length - 1,
@@ -82,8 +81,7 @@ class _LinearChartWidgetState extends State<LinearChartWidget> {
   void _refreshChartData() {
     setState(() {
       _chartData.clear();
-      _chartData
-          .addAll(getRandomChartData()); 
+      _chartData.addAll(getRandomChartData());
       _chartSeriesController.updateDataSource(
         addedDataIndex: _chartData.length - 1,
         removedDataIndex: 0,
@@ -143,7 +141,7 @@ class _LinearChartWidgetState extends State<LinearChartWidget> {
         labelStyle: const TextStyle(color: Colors.white),
       ),
       series: <ChartSeries>[
-        LineSeries<ChartData, DateTime>(
+        AreaSeries<ChartData, DateTime>(
           onRendererCreated: (ChartSeriesController controller) {
             _chartSeriesController = controller;
           },
@@ -156,9 +154,16 @@ class _LinearChartWidgetState extends State<LinearChartWidget> {
             height: 6,
             width: 6,
           ),
-          color: BiColors.red,
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xff0DA6C2),
+              const Color(0xff0DA6C2).withOpacity(0.1)
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
         ),
-        LineSeries<ChartData, DateTime>(
+        AreaSeries<ChartData, DateTime>(
           dataSource: _chartData.where((data) => data.isHighlighted).toList(),
           xValueMapper: (ChartData data, _) => data.time,
           yValueMapper: (ChartData data, _) => data.value,
