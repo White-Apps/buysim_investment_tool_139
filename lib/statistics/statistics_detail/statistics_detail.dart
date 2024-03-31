@@ -2,6 +2,7 @@ import 'package:buysim_investment_tool_137/statistics/statistics_detail/bottom_s
 import 'package:buysim_investment_tool_137/statistics/statistics_detail/cha_cub.dart';
 import 'package:buysim_investment_tool_137/statistics/statistics_detail/pageVi.dart';
 import 'package:buysim_investment_tool_137/statistics/statistics_detail/char.dart';
+import 'package:buysim_investment_tool_137/trade/logic/cubits/get_trade_cubit/get_trade_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,13 +18,20 @@ class StatisticsDetail extends StatefulWidget {
     required this.port,
   });
   final StatisticsModel modelDetail;
-  final double acsi;
   final int port;
+  final double acsi;
+
   @override
   State<StatisticsDetail> createState() => _StatisticsDetailState();
 }
 
 class _StatisticsDetailState extends State<StatisticsDetail> {
+  @override
+  void initState() {
+    context.read<GetTradeCubit>().getAllTradeList();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,7 +135,7 @@ class _StatisticsDetailState extends State<StatisticsDetail> {
             SizedBox(height: 12.h),
             BiMotion(
               onPressed: () {
-                bottomShet(context);
+                bottomShet(context, widget.modelDetail, widget.port);
               },
               child: Container(
                 decoration: BoxDecoration(

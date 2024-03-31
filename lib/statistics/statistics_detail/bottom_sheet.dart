@@ -1,8 +1,12 @@
+import 'package:buysim_investment_tool_137/statistics/model/statistics_model.dart';
+import 'package:buysim_investment_tool_137/trade/logic/cubits/get_trade_cubit/get_trade_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
+import 'package:intl/intl.dart';
 
-Future bottomShet(BuildContext context) {
+Future bottomShet(BuildContext context, StatisticsModel modelDetail, int port) {
   return showModalBottomSheet(
     isScrollControlled: true,
     context: context,
@@ -43,7 +47,7 @@ Future bottomShet(BuildContext context) {
                 child: Padding(
                   padding: EdgeInsets.all(20.r),
                   child: Text(
-                    'You had 18% of MSFT actives',
+                    'You had $port% of ${modelDetail.nameCompany} actives',
                     style: TextStyle(
                       fontSize: 16.h,
                       fontWeight: FontWeight.w500,
@@ -59,18 +63,33 @@ Future bottomShet(BuildContext context) {
                 color: const Color.fromARGB(255, 75, 79, 127).withOpacity(0.5),
               ),
               SizedBox(height: 16.h),
-              Expanded(
-                child: ListView.separated(
-                  itemBuilder: (context, index) {
-                    return const BottomSheetItem(
-                      time: '28.01.2024 20:30PM',
-                      dol: '-50 USDT',
-                      isBanc: true,
+              BlocBuilder<GetTradeCubit, GetTradeState>(
+                builder: (context, state) {
+                  if (state is Loading) {
+                    return const CircularProgressIndicator();
+                  } else if (state is Success) {
+                    final model = state.model;
+                    return Expanded(
+                      child: ListView.separated(
+                        itemBuilder: (context, index) {
+                          return BottomSheetItem(
+                            time: DateFormat('dd.MM.yyyy hh:mm')
+                                .format(model[index].date),
+                            dol: '${model[index].sum} USDT',
+                            isBanc: model[index].chek,
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 12.h),
+                        itemCount: model.length,
+                      ),
                     );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(height: 12.h),
-                  itemCount: 10,
-                ),
+                  } else if (state is Error) {
+                    return Center(child: Text('An error occurred: ${state.e}'));
+                  } else {
+                    return const Center(child: Text('Unexpected state'));
+                  }
+                },
               ),
             ],
           ),
