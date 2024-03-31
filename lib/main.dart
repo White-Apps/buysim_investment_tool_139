@@ -44,14 +44,14 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => CurrencyPairCubit(),
           ),
-           BlocProvider(
+          BlocProvider(
             create: (context) => GetTradeCubit(TradeRepoImpl()),
           ),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'BuySim: Investment Tool',
-          home: child,
+          home: const SplashScreen(),
           theme: ThemeData(
             fontFamily: 'SFProDisplay',
             splashColor: Colors.transparent,
