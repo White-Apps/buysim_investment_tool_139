@@ -3,13 +3,18 @@ import 'package:buysim_investment_tool_137/core/web_vieww.dart';
 import 'package:buysim_investment_tool_137/premium/pre_scr.dart';
 import 'package:buysim_investment_tool_137/settings/buysim_investment_prenvdf.dart';
 import 'package:buysim_investment_tool_137/settings/widget/sett_item.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:buysim_investment_tool_137/core/bi_colors.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

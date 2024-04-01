@@ -8,12 +8,9 @@ import 'package:buysim_investment_tool_137/premium/pre_scr.dart';
 import 'package:buysim_investment_tool_137/settings/buysim_investment_prenvdf.dart';
 import 'package:buysim_investment_tool_137/trade/cubit/balance_cubit.dart';
 import 'package:buysim_investment_tool_137/trade/widget/methos.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class NwWidget extends StatefulWidget {
   const NwWidget({super.key, required this.model});
