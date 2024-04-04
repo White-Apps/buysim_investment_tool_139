@@ -11,22 +11,38 @@ import 'package:buysim_investment_tool_137/trade/logic/models/trade_model.dart';
 import 'package:buysim_investment_tool_137/trade/logic/repositories/trade_repo.dart';
 import 'package:buysim_investment_tool_137/trade/widget/methos.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:apphud/apphud.dart';
+import 'package:in_app_review/in_app_review.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/bi_dc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  OneSignal.initialize('d2517776-d274-4caa-8cb8-f168d4dd601b');
+  await OneSignal.Notifications.requestPermission(true);
   await UserPreferences.init();
   await Hive.initFlutter();
   Hive.registerAdapter(TradeHiveModelAdapter());
-
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
   runApp(const MyApp());
   await Apphud.start(apiKey: DocFF.bsdswqw);
+  await Future.delayed(const Duration(seconds: 8));
+
+  final InAppReview inAppReview = InAppReview.instance;
+  if (await inAppReview.isAvailable()) {
+    inAppReview.requestReview();
+  }
 }
 
 class MyApp extends StatefulWidget {
