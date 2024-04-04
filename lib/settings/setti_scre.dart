@@ -107,14 +107,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 );
               },
             ),
-            Settingsitem(
-              width: 23.w,
-              iconSet: 'assets/icons/4_icon.png',
-              titleSet: 'Restore',
-              onPressed: () {
-                restoreBuysimInvestmentPedf(context);
-              },
-            ),
+            FutureBuilder(
+                future: getBuysimInvestmentPedf(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && !snapshot.data!) {
+                    return Settingsitem(
+                      width: 23.w,
+                      iconSet: 'assets/icons/4_icon.png',
+                      titleSet: 'Restore',
+                      onPressed: () {
+                        restoreBuysimInvestmentPedf(context);
+                      },
+                    );
+                  }
+                  return const SizedBox();
+                }),
           ],
         ),
       ),
